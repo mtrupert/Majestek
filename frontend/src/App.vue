@@ -1,47 +1,99 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
+<!--Main frontend file. Dashboard page for administrative view-->
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <div id="app">
+    <!-- Vertical Navigation Section -->
+    <div class="vertical-nav">
+      <button @click="navigate('view_inventory')">View Inventory</button>
+      <button @click="navigate('view_tickets')">View Support Tickets</button>
+      <button @click="navigate('send_ticket')">Send Support Ticket</button>
+      <button @click="navigate('logout')">Logout</button>
     </div>
-  </header>
 
-  <main>
-    <TheWelcome />
-  </main>
+    <div class="main-content">
+      <!-- Two Main Buttons -->
+      <div class="large-buttons">
+        <button @click="makeReservation">Make a Reservation</button>
+        <button @click="viewReservations">View Reservations</button>
+      </div>
+
+      <!-- Additional Content Goes Here -->
+
+    </div>
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
+<script>
+export default {
+  methods: {
+    navigate(section) {
+      // Implement navigation logic based on the selected section
+      // For example, you can use Vue Router or handle it manually
+      console.log(`Navigating to ${section}`);
+    },
+    makeReservation() {
+      // Implement logic to handle the "Make Reservation" button click
+      console.log("Making Reservation");
+    },
+    viewReservations() {
+      // Implement logic to handle the "View Reservations" button click
+      console.log("Viewing Reservations");
+    },
+  },
+};
+</script>
+
+<style>
+#app {
+  display: flex;
 }
 
-.logo {
+.vertical-nav {
+  width: 150px;
+  background-color: #f0f0f0;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.vertical-nav button {
   display: block;
-  margin: 0 auto 2rem;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  text-align: left;
+  border: none;
+  background-color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.vertical-nav button:hover {
+  background-color: #e0e0e0;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.large-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.large-buttons button {
+  flex: 1;
+  padding: 50px;
+  font-size: 16px;
+  background-color: #ae5252;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.large-buttons button:hover {
+  background-color: #7d0d0d;
 }
 </style>
