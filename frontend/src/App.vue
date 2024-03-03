@@ -135,6 +135,7 @@ body {
   margin-right: 20px; 
 }
 
+
 .large-buttons {
   display: flex;
   justify-content: space-between;
