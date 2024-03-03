@@ -7,3 +7,11 @@ const db = mysql.createConnection({
     pw: "password",
     dbName: "Majestek"
 });
+
+db.connect((err) => {
+    if (err) {
+        console.log(err.message);
+        return;
+    }
+    console.log("Database connected.")
+});
