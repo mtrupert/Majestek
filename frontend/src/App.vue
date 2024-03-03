@@ -76,6 +76,10 @@ export default {
   padding: 20px;
 }
 
+.large-buttons button:first-child {
+  margin-right: 20px; 
+}
+
 .large-buttons {
   display: flex;
   justify-content: space-between;
@@ -84,11 +88,12 @@ export default {
 
 .large-buttons button {
   flex: 1;
-  padding: 50px;
-  font-size: 16px;
+  padding: 200px 100px;
+  font-size: 20px;
   background-color: #ae5252;
   color: #fff;
-  border: none;
+  border: 2px solid black;
+  border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
