@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-
+     <!-- Title Container -->
+     <div class="title-container">
+      <h1 class="page-title">UH IT Device Reservation</h1>
+    </div>
     <!-- Vertical Navigation Section -->
     <div class="vertical-nav">
       <img src="./assets/UHLOGO.jpg" alt="Logo" class="logo">
@@ -88,6 +91,25 @@ body {
   min-height: 100vh; /* Make the app div span the entire viewport height */
   background-color: #f5f5f5; /* Light gray background */
 }
+.title-container {
+  background-color: red;
+  text-align: center;
+  padding: 10px 0; /* Adjust vertical padding */
+  width: 100%; /* Make the container span the width of the page */
+  box-sizing: border-box; /* Include padding in the width calculation */
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1.2in; /* Set the height to 1 inch */
+}
+
+.page-title {
+  margin: 0; /* Remove default margin */
+  color: black; 
+  font-size: 50px;
+  font-family: Aptos, Calibri, sans-serif;
+  font-weight: 400;
+}
 
 .logo {
   position: absolute; /* Position the logo */
@@ -152,7 +174,7 @@ body {
   flex: 1;
   padding: 10px 10px;
   font-size: 35px;
-  background-color: #ae5252;
+  background-color: #ff7575;
   color: #fff;
   border: 2px solid black;
   border-radius: 5px;
@@ -161,6 +183,6 @@ body {
 }
 
 .large-buttons button:hover {
-  background-color: #7d0d0d;
+  background-color: red;
 }
 </style>
