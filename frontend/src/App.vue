@@ -1,7 +1,5 @@
 <template>
   <div id="app">
-    <!-- Logo -->
-    
 
     <!-- Vertical Navigation Section -->
     <div class="vertical-nav">
@@ -12,11 +10,12 @@
       <button @click="navigate('logout')">Logout</button>
     </div>
 
+    <!--Main Area of Page-->
     <div class="main-content">
       <!-- Two Main Buttons -->
       <div class="large-buttons">
-        <button @click="makeReservation">Make a Reservation</button>
-        <button @click="viewReservations">View Reservations</button>
+        <button @click="makeReservation">Make a Reservation <img src="./assets/clipboard_icon.png" alt="Make Reservations Icon" class="icon"></button>
+        <button @click="viewReservations">View Reservations <img src="./assets/computer_icon.png" alt="View Reservations Icon" class="icon"></button>
       </div>
 
       <!-- Additional Content Sections -->
@@ -92,10 +91,14 @@ body {
 
 .logo {
   position: absolute; /* Position the logo */
-  top: 20px; /* Adjust the top position */
-  left: 20px; /* Adjust the left position */
+  top: 0px; /* Adjust the top position */
+  left: 0px; /* Adjust the left position */
   width: 150px; /* Adjust the width of the logo */
   height: auto; /* Maintain aspect ratio */
+}
+
+.icon {
+  height: 50%;
 }
 
 .vertical-nav {
@@ -113,7 +116,8 @@ body {
   display: block;
   width: 100%;
   padding: 10px;
-  margin-bottom: 10px;
+  margin-top: 150px;
+  margin-bottom: 0px;
   text-align: left;
   border: none;
   background-color: #fff;
@@ -126,7 +130,8 @@ body {
 }
 
 .main-content {
-  margin-left: 150px; /* Adjust the left margin to accommodate the navigation */
+  margin-left: 10px; /* Adjust the left margin to accommodate the navigation */
+  margin-top: 125px;
   flex: 1;
   padding: 20px;
 }
@@ -140,12 +145,13 @@ body {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+  margin-top: 50px;
 }
 
 .large-buttons button {
   flex: 1;
-  padding: 200px 100px;
-  font-size: 20px;
+  padding: 10px 10px;
+  font-size: 35px;
   background-color: #ae5252;
   color: #fff;
   border: 2px solid black;
