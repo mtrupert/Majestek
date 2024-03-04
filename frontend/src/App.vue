@@ -2,7 +2,7 @@
   <div id="app">
      <!-- Title Container -->
      <div class="title-container">
-      <h1 class="page-title">UH IT Device Reservation</h1>
+      <h1 class="page-title">UH IT Device Reservations</h1>
     </div>
     <!-- Vertical Navigation Section -->
     <div class="vertical-nav">
@@ -106,9 +106,9 @@ body {
 .page-title {
   margin: 0; /* Remove default margin */
   color: black; 
-  font-size: 50px;
+  font-size: 65px;
   font-family: Aptos, Calibri, sans-serif;
-  font-weight: 400;
+  font-weight: 370;
 }
 
 .logo {
