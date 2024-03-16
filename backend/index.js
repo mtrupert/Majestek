@@ -1,4 +1,9 @@
+const express = require('express')
 const mysql = require('mysql');
+
+const app = express();
+
+PORT = 8080;
 
 // Configuration for MySQL Database
 const db = mysql.createConnection({
@@ -15,4 +20,8 @@ db.connect((err) => {
         return;
     }
     console.log("Database connected.")
+});
+
+app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`)
 });
