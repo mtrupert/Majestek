@@ -29,6 +29,8 @@ app.listen(PORT, () => {
 
 
 
+
+
 //POST requests
 
 //POST Locker
@@ -52,7 +54,7 @@ app.post("/lockers/:info", async (req, res) => {
 
 
 //POST Equipment
-app.post("/equipment:info", async (req, res) => {
+app.post("/equipment/:info", async (req, res) => {
     try {
 
         //Im not sure how to do this part tbh
@@ -113,6 +115,7 @@ app.post("/users/:info", async (req, res) => {
         });
     }
 });
+
 
 
 
@@ -205,6 +208,8 @@ app.get("/users", async (req, res) => {
         });
     }
 });
+
+
 
 
 
@@ -306,6 +311,98 @@ app.post("/reservations/:user_id/:info", async (req, res) => {
 
 
 
+
+//DELETE requests
+
+
+
+//POST Locker
+app.delete("/lockers/:locker_id", async (req, res) => {
+    try {
+
+        Locker_ID = locker_id
+
+        json_info = info
+
+        var command = "DELETE FROM Locker WHERE locker_id = ${Locker_ID}"
+
+        db.query(command)
+
+        console.log("Information Deleted")
+    }
+    catch (err) {
+        res.status(500).json({
+            message: err,
+        });
+    }
+});
+
+
+//DELETE Equipment by equipment_id
+app.delete("/equipment/:equipment_id", async (req, res) => {
+    try {
+
+        equip_id = equipment_id
+
+        json_info = to_list(info)
+
+        var command ="DELETE FROM Equipment  WHERE equipment_id = ${equip_id}"
+
+        db.query(command)
+
+        console.log("Information Deleted")
+    }
+    catch (err) {
+        res.status(500).json({
+            message: err,
+        });
+    }
+});
+
+
+//DELETE Reservation by reservation_id
+app.delete("/reservations/:reservation_id", async (req, res) => {
+    try {
+
+        Reserve_ID = reservation_id
+
+        json_info = to_list(info)
+
+        var command = "DELETE FROM Reservation WHERE reservation_id = ${Reserve_ID}"
+
+        db.query(command)
+
+        console.log("Information Deleted")
+    }
+    catch (err) {
+        res.status(500).json({
+            message: err,
+        });
+    }
+});
+
+
+
+//DELETE User
+app.delete("/users/:user_id", async (req, res) => {
+    try {
+
+        User_ID = user_id
+
+        json_info = to_list(info)
+
+        var command = "DELETE FROM User WHERE user_id = ${User_ID}"
+
+         db.query(command)
+
+        console.log("Information Deleted")
+    }
+    catch (err) {
+        res.status(500).json({
+            message: err,
+        });
+    }
+});
 
 
 
