@@ -113,12 +113,6 @@ app.post("/users/:info", async (req, res) => {
         });
     }
 });
-<<<<<<< HEAD
-=======
-
-
-
-
 
 // select or GET requests
 
@@ -307,15 +301,4 @@ app.post("/reservations/:user_id/:info", async (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
 app.run();
->>>>>>> parent of e3dcec1 (DELETE statements)
