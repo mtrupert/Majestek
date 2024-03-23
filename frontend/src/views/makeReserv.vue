@@ -15,7 +15,7 @@
       <div class="main-content">
        
       <!-- Form for Reservation Making -- this might not be exacly what will work but need more information to 
-        be able to completely make a reservation form
+        be able to completely make a reservation form 
 
       <form @submit.prevent="submitReservation">
       <-- Item Type Dropdown -->

@@ -15,7 +15,7 @@
       <div class="main-content">
        
        <ul>
-        <!-- Loop through reservedItems and display them (an example of what will be used)-->
+        <!-- Loop through reservedItems and display them (an example of what will be used) -->
         <li v-for="item in reservedItems" :key="item.id">{{ item.name }}</li>
        </ul>
   
