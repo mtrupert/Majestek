@@ -184,68 +184,85 @@ app.get("/users", async (req, res) => {
 
 
 //UPDATE User by user_id
-app.post("/users/:user_id/:info", async (req, res) => {
+app.put("/users/update/:info", async (req, res) => {
+ 
+ 
+    //the first value needs to be the user id and the rest the params
+    
+    json_info = (req.params.info)
 
+    split = json_info.split(',')
 
-    //grab the user id
-    User_ID = user_id
+    var command = "UPDATE User SET user_name ="+split[1] + ", user_email =" + split[2] + ", user_role = " + split[3]+", falc_stu_status =" + split[4]+", user_password =" + split[5] + " WHERE user_id =" +  split[0] 
 
-    //Im not sure how to do this part tbh
-    json_info = JSON.stringify(info)
-
-    var command = "UPDATE User SET (user_id = ${info[0]}, user_name =${info[1]}, user_password =${info[2]}, user_email =${info[3]}, user_role =${info[4]}, fal_stu_status=${info[5]}) WHERE user_id = ${user_id}"
     db.query(command)
 
     console.log("Information Updated")
+
+    res.send('updated')
 });
 
 
 
 //UPDATE equipment by equipment_id
-app.post("/equipment/:equipment_id/:info", async (req, res) => {
+app.put("/equipment/update/:info", async (req, res) => {
 
-    equip_id = equipment_id
 
-    //Im not sure how to do this part tbh
-    json_info = to_list(info)
+    //the first value needs to be the equipment id and the rest the params
 
-    var command = "UPDATE Equipment  SET (equipment_id = ${info[0]}, equipment_type_id = ${info[1}, avail_status = ${info[2]}) WHERE equipment_id = ${equip_id}"
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+
+    //because of foreign constraints you cannot change the others
+
+    var command = "UPDATE Equipment  SET avail_status = "+split[1] + " WHERE equipment_id = "+split[0]
     db.query(command)
     console.log("Information Updated")
+
+    res.send('updated')
 
 });
 
 
 //UPDATE Locker by locker_id
-app.post("/lockers/:locker_id/:info", async (req, res) => {
+app.put("/lockers/update/:info", async (req, res) => {
 
 
-    Locker_ID = locker_id
+   
+    //the first value needs to be the locker  id and the rest the params
 
-    json_info = info
+    json_info = (req.params.info)
 
-    var command = "UPDATE Locker SET (locker_id = ${info[0]}, room_id = ${info[1]}, avail_status = ${info[2]}) WHERE locker_id = ${Locker_ID}"
+    split = json_info.split(',')
+
+
+    var command = "UPDATE Locker SET  serial_num = "+split[1] + ", avail_status = " + split[2] +   "WHERE locker_id ="+ split[0]
 
     db.query(command)
 
     console.log("Information Updated")
+    res.send('updated')
 });
 
 
 //UPDATE Reservation by user_id
-app.post("/reservations/:user_id/:info", async (req, res) => {
+app.put("/reservations/update/:info", async (req, res) => {
+
+    //start with user id
 
 
+    json_info = (req.params.info)
 
-    User_ID = user_id
+    split = json_info.split(',')
 
-    json_info = to_list(info)
-
-    var command = "Update Reservation SET (reservation_id = ${info[0]}, equipment_id = ${info[1]}, locker_id = ${info[2]}, user_id = ${info[3]}, reserv_start = ${info[4]}, reserv_end =${info[5]}, reserv_status = ${info[6]}) WHERE user_id = ${User_ID}"
+    var command = "Update Reservation SET equipment_id = "+split[1] + ", locker_id ="+split[2] + ", user_id = "+split[3] + ", reserv_start = "+split[4] + ", reserv_end ="+split[5] + ", reserv_status = "+split[6] + " WHERE reservation_id ="+split[0] 
 
     db.query(command)
 
     console.log("Information Updated")
+    res.send('updated')
 });
 
 module.exports = { app }
