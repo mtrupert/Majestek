@@ -265,4 +265,76 @@ app.put("/reservations/update/:info", async (req, res) => {
     res.send('updated')
 });
 
+
+app.delete("/users/delete/:info", async (req,res) => {
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "DELETE FROM User WHERE user_id =" + split[0]
+
+    db.query(command)
+
+    console.log("delete")
+    res.send('deleted')
+
+});
+
+
+app.delete("/reservations/delete/:info", async (req,res) => {
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "DELETE FROM Reservation WHERE reservation_id =" + split[0]
+
+    db.query(command)
+
+    console.log("delete")
+    res.send('deleted')
+
+});
+
+
+
+app.delete("/lockers/delete/:info", async (req,res) => {
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "DELETE FROM Locker WHERE locker_id =" + split[0]
+
+    db.query(command)
+
+    console.log("delete")
+    res.send('deleted')
+
+});
+
+/*
+foreign key constraint cannot delete equipment
+app.delete("/equipment/delete/:info", async (req,res) => {
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "DELETE FROM Equipment WHERE equipment_id =" + split[0]
+
+    db.query(command)
+
+    console.log("delete")
+    res.send('deleted')
+
+});*/
+
+
+
+
+
+
+
 module.exports = { app }
