@@ -35,11 +35,13 @@ app.listen(PORT, () => {
 //POST Locker
 app.post("/lockers/post/:id", async (req, res) => {
 
+    //sample Postman url: http://localhost:8080/lockers/post/50,1,'yes', 1
+    //it has to be this way not parameters or body if you know how to fix that let me know please
+
     json_info = (req.params.id)
 
     split = json_info.split(',')
 
-    console.log(split[1])
 
     var command = "INSERT INTO Locker (locker_id, serial_num, avail_status, room_id) VALUES (" + split[0] + ", "+ split[1] +", "+ split[2] + ", "+ split[3] + ")"
     db.query(command)
@@ -50,49 +52,60 @@ app.post("/lockers/post/:id", async (req, res) => {
 });
 
 //POST Equipment
-app.post("/equipment:info", async (req, res) => {
+app.post("/equipment/post/:info", async (req, res) => {
 
-    //Im not sure how to do this part tbh
-    json_info = info
+    json_info = (req.params.info)
 
-    var command = "INSET INTO Equipment (equipment_id, equipment_type_id, avail_status) VALUES (${info[0]}, ${info[1]}, ${info[2]})"
+
+    console.log(split[1])
+
+    var command = "INSERT INTO Equipment (equipment_id, equipment_type_id, avail_status) VALUES (" + split[0] + ", "+ split[1] +", "+ split[2] + ")"
+ 
 
     db.query(command)
 
     console.log("Information Inserted")
+    
+    res.send('Information Inserted')
 
 });
 
 
 //POST Reservation
-app.post("/reservations/:info", async (req, res) => {
+app.post("/reservations/post/:info", async (req, res) => {
 
-    //Im not sure how to do this part tbh
-    json_info = info
+    json_info = (req.params.info)
 
-    var command = "INSET INTO Reservation (reservation_id, equipment_id, locker_id, user_id, reserv_start, reserv_end, reserv_status) VALUES (${info[0]}, ${info[1]}, ${info[2]}, ${info[3]}, ${info[4]}, ${info[5]}, ${info[6]})"
+    split = json_info.split(',')
+
+
+    var command = "INSERT INTO Reservation (reservation_id, reserv_start, reserv_end,reserv_status,  equipment_id, locker_id, user_id) VALUES (" + split[0] + ", "+ split[1] +", "+ split[2]+", "+ split[3] +", "+ split[4] +", "+ split[5]+", "+ split[6]+  ")"
+ 
 
     db.query(command)
 
     console.log("Information Inserted")
-
+    res.send('Information Inserted')
 });
 
 
 
 //POST User
-app.post("/users/:info", async (req, res) => {
+app.post("/users/post/:info", async (req, res) => {
 
 
-    //Im not sure how to do this part tbh
-    json_info = info
+    json_info = (req.params.info)
 
-    var command = "INSET INTO User (user_id, user_name, user_password, user_email, user_role, fal_stu_status) VALUES (${info[0]}, ${info[1]}, ${info[2]}, ${info[3]}, ${info[4]}, ${info[5]})"
+    split = json_info.split(',')
+
+
+    var command = "INSERT INTO User (user_id, user_name, user_email, user_role, falc_stu_status, user_password) VALUES (" + split[0] + ", "+ split[1] +", "+ split[2]+", "+ split[3] +", "+ split[4] +", "+ split[5]+  ")"
+ 
 
     db.query(command)
 
     console.log("Information Inserted")
-
+    res.send('Information Inserted')
 });
 
 // select or GET requests
