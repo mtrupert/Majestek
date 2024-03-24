@@ -1,3 +1,4 @@
+const { info } = require('console');
 const express = require('express')
 const mysql = require('mysql');
 const { createConnection } = require('net');
@@ -32,174 +33,135 @@ app.listen(PORT, () => {
 //POST requests
 
 //POST Locker
-app.post("/lockers/:info", async (req, res) => {
-    try {
+app.post("/lockers/post/:id", async (req, res) => {
 
-        json_info = info
+    json_info = (req.params.id)
 
-        var command = "INSET INTO Locker (locker_id, room_id, avail_status) VALUES (${info[0]}, ${info[1]}, ${info[2]})"
+    split = json_info.split(',')
 
-        db.query(command)
+    console.log(split[1])
 
-        console.log("Information Inserted")
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+    var command = "INSERT INTO Locker (locker_id, serial_num, avail_status, room_id) VALUES (" + split[0] + ", "+ split[1] +", "+ split[2] + ", "+ split[3] + ")"
+    db.query(command)
+
+    console.log("Information Inserted")
+
+    res.send('Information Inserted')
 });
-
 
 //POST Equipment
 app.post("/equipment:info", async (req, res) => {
-    try {
 
-        //Im not sure how to do this part tbh
-        json_info = to_list(info)
+    //Im not sure how to do this part tbh
+    json_info = info
 
-        var command = "INSET INTO Equipment (equipment_id, equipment_type_id, avail_status) VALUES (${info[0]}, ${info[1]}, ${info[2]})"
+    var command = "INSET INTO Equipment (equipment_id, equipment_type_id, avail_status) VALUES (${info[0]}, ${info[1]}, ${info[2]})"
 
-        db.query(command)
+    db.query(command)
 
-        console.log("Information Inserted")
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+    console.log("Information Inserted")
+
 });
 
 
 //POST Reservation
 app.post("/reservations/:info", async (req, res) => {
-    try {
 
-        //Im not sure how to do this part tbh
-        json_info = to_list(info)
+    //Im not sure how to do this part tbh
+    json_info = info
 
-        var command = "INSET INTO Reservation (reservation_id, equipment_id, locker_id, user_id, reserv_start, reserv_end, reserv_status) VALUES (${info[0]}, ${info[1]}, ${info[2]}, ${info[3]}, ${info[4]}, ${info[5]}, ${info[6]})"
+    var command = "INSET INTO Reservation (reservation_id, equipment_id, locker_id, user_id, reserv_start, reserv_end, reserv_status) VALUES (${info[0]}, ${info[1]}, ${info[2]}, ${info[3]}, ${info[4]}, ${info[5]}, ${info[6]})"
 
-        db.query(command)
+    db.query(command)
 
-        console.log("Information Inserted")
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+    console.log("Information Inserted")
+
 });
 
 
 
 //POST User
 app.post("/users/:info", async (req, res) => {
-    try {
 
-        //Im not sure how to do this part tbh
-        json_info = to_list(info)
 
-        var command = "INSET INTO User (user_id, user_name, user_password, user_email, user_role, fal_stu_status) VALUES (${info[0]}, ${info[1]}, ${info[2]}, ${info[3]}, ${info[4]}, ${info[5]})"
+    //Im not sure how to do this part tbh
+    json_info = info
 
-        db.query(command)
+    var command = "INSET INTO User (user_id, user_name, user_password, user_email, user_role, fal_stu_status) VALUES (${info[0]}, ${info[1]}, ${info[2]}, ${info[3]}, ${info[4]}, ${info[5]})"
 
-        console.log("Information Inserted")
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+    db.query(command)
+
+    console.log("Information Inserted")
+
 });
 
 // select or GET requests
 
 //GET Reservations
 app.get("/reservations", async (req, res) => {
-    try {
-        const result = db.query("SELECT * FROM Reservation")
 
-        console.log(result)
+    db.query("SELECT * FROM Reservation", (err, result) => {
 
-        res.render({ data: result })
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+        console.log(JSON.stringify(result))
+
+        res.send(result)
+
+    });
 });
 
-
 //GET Reservation by User
-app.get("/reservations/:user_id", async (req, res) => {
-    try {
-        UserID = user_id
-        const result = db.query("SELECT * FROM Reservation where user_id = ${UserID}")
+app.get("/reservation-user/:user_id", async (req, res) => {
 
-        console.log(result)
+    UserID = req.params.user_id
 
-        res.render({ data: result })
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+    db.query("SELECT * FROM Reservation WHERE user_id = " + UserID, (err, result) => {
+
+        console.log(result[0])
+
+        res.send(JSON.stringify(result[0]))
+
+    });
 });
 
 
 //GET Lockers
 app.get("/lockers", async (req, res) => {
-    try {
-        const result = db.query("SELECT * FROM Locker")
 
-        console.log(result)
 
-        res.render({ data: result })
+    db.query("SELECT * FROM Locker", (err, result) => {
+
+        console.log(JSON.stringify(result))
+
+        res.send(result)
+
     }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
-});
-
+    );
+}
+);
 
 //GET Equipment
 app.get("/equipment", async (req, res) => {
-    try {
-        const result = db.query("SELECT * FROM Equipment")
+
+    db.query("SELECT * FROM Equipment", (err, result) => {
 
         console.log(result)
 
 
-        res.render({ data: result })
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+        res.send({ result })
+
+    });
 });
+
 
 
 //GET User
 app.get("/users", async (req, res) => {
-    try {
-        const result = db.query("SELECT * FROM User")
+    db.query("SELECT * FROM User", (err, result) => {
 
-        console.log(result)
+        console.log(JSON.stringify(result))
 
-        res.render({ data: result })
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+        res.send(result)
+    });
 });
 
 
@@ -210,95 +172,67 @@ app.get("/users", async (req, res) => {
 
 //UPDATE User by user_id
 app.post("/users/:user_id/:info", async (req, res) => {
-    try {
 
-        //grab the user id
-        User_ID = user_id
 
-        //Im not sure how to do this part tbh
-        json_info = to_list(info)
+    //grab the user id
+    User_ID = user_id
 
-        var command = "UPDATE User SET (user_id = ${info[0]}, user_name =${info[1]}, user_password =${info[2]}, user_email =${info[3]}, user_role =${info[4]}, fal_stu_status=${info[5]}) WHERE user_id = ${user_id}"
-        db.query(command)
+    //Im not sure how to do this part tbh
+    json_info = JSON.stringify(info)
 
-        console.log("Information Updated")
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+    var command = "UPDATE User SET (user_id = ${info[0]}, user_name =${info[1]}, user_password =${info[2]}, user_email =${info[3]}, user_role =${info[4]}, fal_stu_status=${info[5]}) WHERE user_id = ${user_id}"
+    db.query(command)
+
+    console.log("Information Updated")
 });
 
 
 
 //UPDATE equipment by equipment_id
 app.post("/equipment/:equipment_id/:info", async (req, res) => {
-    try {
 
-        equip_id = equipment_id
+    equip_id = equipment_id
 
-        //Im not sure how to do this part tbh
-        json_info = to_list(info)
+    //Im not sure how to do this part tbh
+    json_info = to_list(info)
 
-        var command = "UPDATE Equipment  SET (equipment_id = ${info[0]}, equipment_type_id = ${info[1}, avail_status = ${info[2]}) WHERE equipment_id = ${equip_id}"
-        db.query(command)
+    var command = "UPDATE Equipment  SET (equipment_id = ${info[0]}, equipment_type_id = ${info[1}, avail_status = ${info[2]}) WHERE equipment_id = ${equip_id}"
+    db.query(command)
+    console.log("Information Updated")
 
-        console.log("Information Updated")
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
 });
 
 
 //UPDATE Locker by locker_id
 app.post("/lockers/:locker_id/:info", async (req, res) => {
-    try {
 
-        Locker_ID = locker_id
 
-        json_info = info
+    Locker_ID = locker_id
 
-        var command = "UPDATE Locker SET (locker_id = ${info[0]}, room_id = ${info[1]}, avail_status = ${info[2]}) WHERE locker_id = ${Locker_ID}"
+    json_info = info
 
-        db.query(command)
+    var command = "UPDATE Locker SET (locker_id = ${info[0]}, room_id = ${info[1]}, avail_status = ${info[2]}) WHERE locker_id = ${Locker_ID}"
 
-        console.log("Information Updated")
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+    db.query(command)
+
+    console.log("Information Updated")
 });
-
 
 
 //UPDATE Reservation by user_id
 app.post("/reservations/:user_id/:info", async (req, res) => {
-    try {
 
-        
-        User_ID = user_id
 
-        json_info = to_list(info)
 
-        var command = "Update Reservation SET (reservation_id = ${info[0]}, equipment_id = ${info[1]}, locker_id = ${info[2]}, user_id = ${info[3]}, reserv_start = ${info[4]}, reserv_end =${info[5]}, reserv_status = ${info[6]}) WHERE user_id = ${User_ID}"
+    User_ID = user_id
 
-        db.query(command)
+    json_info = to_list(info)
 
-        console.log("Information Updated")
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+    var command = "Update Reservation SET (reservation_id = ${info[0]}, equipment_id = ${info[1]}, locker_id = ${info[2]}, user_id = ${info[3]}, reserv_start = ${info[4]}, reserv_end =${info[5]}, reserv_status = ${info[6]}) WHERE user_id = ${User_ID}"
+
+    db.query(command)
+
+    console.log("Information Updated")
 });
 
-
-
-app.run();
+module.exports = { app }
