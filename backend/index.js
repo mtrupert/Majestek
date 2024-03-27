@@ -265,4 +265,100 @@ app.put("/reservations/update/:info", async (req, res) => {
     res.send('updated')
 });
 
+
+app.delete("/users/delete/:info", async (req,res) => {
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "DELETE FROM User WHERE user_id =" + split[0]
+
+    db.query(command)
+
+    console.log("delete")
+    res.send('deleted')
+
+});
+
+
+app.delete("/reservations/delete/:info", async (req,res) => {
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "DELETE FROM Reservation WHERE reservation_id =" + split[0]
+
+    db.query(command)
+
+    console.log("delete")
+    res.send('deleted')
+
+});
+
+
+
+app.delete("/lockers/delete/:info", async (req,res) => {
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "DELETE FROM Locker WHERE locker_id =" + split[0]
+
+    db.query(command)
+
+    console.log("delete")
+    res.send('deleted')
+
+});
+
+/*
+foreign key constraint cannot delete equipment
+app.delete("/equipment/delete/:info", async (req,res) => {
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "DELETE FROM Equipment WHERE equipment_id =" + split[0]
+
+    db.query(command)
+
+    console.log("delete")
+    res.send('deleted')
+
+});*/
+
+//special POST User aka Register new user
+
+
+//POST User
+app.post("/users/register/:info", async (req, res) => {
+
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    db.query("SELECT user_id FROM User", (err, result) => {
+
+        console.log(JSON.stringify(result))
+
+    })
+
+
+    //var command = "INSERT INTO User (user_id, user_name, user_email, user_role, falc_stu_status, user_password) VALUES (" + split[0] + ", "+ split[1] +", "+ split[2]+", "+ split[3] +", "+ split[4] +", "+ split[5]+  ")"
+ 
+
+  //  db.query(command)
+
+    console.log("Information Inserted")
+    res.send('Information Inserted')
+});
+
+
+
+
 module.exports = { app }
