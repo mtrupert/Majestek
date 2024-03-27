@@ -331,32 +331,8 @@ app.delete("/equipment/delete/:info", async (req,res) => {
 
 });*/
 
-//special POST User aka Register new user
 
 
-//POST User
-app.post("/users/register/:info", async (req, res) => {
-
-
-    json_info = (req.params.info)
-
-    split = json_info.split(',')
-
-    db.query("SELECT user_id FROM User", (err, result) => {
-
-        console.log(JSON.stringify(result))
-
-    })
-
-
-    //var command = "INSERT INTO User (user_id, user_name, user_email, user_role, falc_stu_status, user_password) VALUES (" + split[0] + ", "+ split[1] +", "+ split[2]+", "+ split[3] +", "+ split[4] +", "+ split[5]+  ")"
- 
-
-  //  db.query(command)
-
-    console.log("Information Inserted")
-    res.send('Information Inserted')
-});
 
 
 
