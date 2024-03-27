@@ -97,9 +97,13 @@ app.get("/verify-email", (req, res) => {
     res.status(200).send("Verification Successful");
     console.log("Verification successful");
 
-    const {user, pass} = decodedToken;
-    console.log(user);
-    console.log(pass);
+    const {user, pass, email} = decodedToken;
+    
+    var command = `INSERT INTO User (user_name, user_password, user_email, user_role) VALUES ( "${user}", "${pass}", "${email}", "User")`;
+
+    db.query(command);
+
+    console.log("User Created");
         
     }
 );
@@ -188,7 +192,7 @@ app.post("/lockers/:info", async (req, res) => {
 
         json_info = info
 
-        var command = "INSET INTO Locker (locker_id, room_id, avail_status) VALUES (${info[0]}, ${info[1]}, ${info[2]})"
+        var command = "INSERT INTO Locker (locker_id, room_id, avail_status) VALUES (${info[0]}, ${info[1]}, ${info[2]})"
 
         db.query(command)
 
@@ -252,7 +256,7 @@ app.post("/users/:info", async (req, res) => {
         //Im not sure how to do this part tbh
         json_info = to_list(info)
 
-        var command = "INSET INTO User (user_id, user_name, user_password, user_email, user_role, fal_stu_status) VALUES (${info[0]}, ${info[1]}, ${info[2]}, ${info[3]}, ${info[4]}, ${info[5]})"
+        var command = "INSERT INTO User (user_id, user_name, user_password, user_email, user_role, fal_stu_status) VALUES (${info[0]}, ${info[1]}, ${info[2]}, ${info[3]}, ${info[4]}, ${info[5]})"
 
         db.query(command)
 
