@@ -1,9 +1,11 @@
 const express = require('express')
 const mysql = require('mysql');
 const { createConnection } = require('net');
+const jwt = require('jsonwebtoken');
 const { generateToken, getMailOptions, getMailOptions2, getMailPassword } = require('./service');
 
 const app = express();
+app.use(express.json());
 
 PORT = 8080;
 

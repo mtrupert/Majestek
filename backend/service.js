@@ -18,10 +18,10 @@ exports.getMailOptions = (email, link) => {
 
     nodeoutlook.sendEmail({
         auth: {
-            user: process.env.EMAIL,
-            pass: process.env.EMAIL_PASS
+            user: "kyleleevy1@outlook.com",
+            pass: "Ciboney1920!"
         },
-        from: process.env.EMAIL,
+        from: 'kyleleevy1@outlook.com',
         to: email,
         subject: 'Testing...',
         html: body,
