@@ -1,11 +1,9 @@
+const { info } = require('console');
 const express = require('express')
 const mysql = require('mysql');
 const { createConnection } = require('net');
-const jwt = require('jsonwebtoken');
-const { generateToken, getMailOptions, getMailOptions2, getMailPassword } = require('./service');
 
 const app = express();
-app.use(express.json());
 
 PORT = 8080;
 
@@ -32,337 +30,151 @@ app.listen(PORT, () => {
 
 
 
-/////// Email APIs ////////////////////
-
-// Email Registration POST
-app.post('/register', (req, res) =>{
-    const { email } = req.body;
-    const { user } = req.body;
-    const { pass } = req.body;
-
-    if (!email) {
-        res.status(400).send({
-            message: "Invalid email"
-        });
-    }
-
-    const token = generateToken(email, user, pass);
-
-    const link = `http://localhost:8080/verify-email?token=${token}`;
-    console.log("Token Created.")
-
-    console.log("Mail request made.")
-    
-    getMailOptions(email, link, (error) => {
-        if (error) {
-            res.status(500).send("Can't send email");
-            console.log(error);
-        } else {
-            res.status(200).send("Email sent");
-            console.log("Completed");
-        }
-        
-    })
-}    
-);
-
-
-// Verify tokens sent from emails 
-app.get("/verify-email", (req, res) => {
-    const token = req.query.token;
-    if (!token) {
-        res.status(401).send("Invalid user token");
-        return;
-    }
-
-    let decodedToken;
-    try {
-        decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    } catch {
-        res.status(401).send("Invalid authentication credentials");
-        return;
-    }
-
-    if (
-        !decodedToken.hasOwnProperty("email") || !decodedToken.hasOwnProperty("expirationDate")
-    ) {
-        res.status(401).send("Invalid authenication credentials.");
-        return;
-    }
-
-    const expirationDate  = decodedToken;
-
-    if (expirationDate < new Date()) {
-        res.status(401).send("Token has expired.");
-        return;
-    }
-    res.status(200).send("Verification Successful");
-    console.log("Verification successful");
-
-    const {user, pass, email} = decodedToken;
-    
-    var command = `INSERT INTO User (user_name, user_password, user_email, user_role) VALUES ( "${user}", "${pass}", "${email}", "User")`;
-
-    db.query(command);
-
-    console.log("User Created");
-        
-    }
-);
-
-// Forget Password Email POST
-app.post('/forgot-password', (req, res) =>{
-    const { email } = req.body;
-
-    if (!email) {
-        res.status(400).send({
-            message: "Invalid email"
-        });
-    }
-
-    const token = generateToken(email);
-
-    const link = `http://localhost:8080/verify-password?token=${token}`;
-    console.log("Token Created.")
-
-    console.log("Mail request made.")
-    
-    getMailPassword(email, link, (error) => {
-        if (error) {
-            res.status(500).send("Can't send email");
-            console.log(error);
-        } else {
-            res.status(200).send("Email sent");
-            console.log("Completed");
-        }
-        
-    })
-}    
-);
-
-// GET for Change Password Email
-app.get("/verify-password", (req, res) => {
-    const token = req.query.token;
-    if (!token) {
-        res.status(401).send("Invalid user token");
-        return;
-    }
-
-    let decodedToken;
-    try {
-        decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    } catch {
-        res.status(401).send("Invalid authentication credentials");
-        return;
-    }
-
-    if (
-        !decodedToken.hasOwnProperty("email") || !decodedToken.hasOwnProperty("expirationDate")
-    ) {
-        res.status(401).send("Invalid authenication credentials.");
-        return;
-    }
-
-
-    const expirationDate  = decodedToken;
-
-    if (expirationDate < new Date()) {
-        res.status(401).send("Token has expired.");
-        return;
-    }
-    res.status(200).send("Verification Successful");
-    console.log("Verification successful");
-
-    const { email } = decodedToken;
-
-    // ADD MySQL FOR ALTERING PASSWORD
-    console.log(`Please enter new password for :${email} `)
-        
-    }
-);
-
-
-
-///////////////////////////////////////
 //POST requests
 
-
-
 //POST Locker
-app.post("/lockers/:info", async (req, res) => {
-    try {
+app.post("/lockers/post/:id", async (req, res) => {
 
-        json_info = info
+    //sample Postman url: http://localhost:8080/lockers/post/50,1,'yes', 1
+    //it has to be this way not parameters or body if you know how to fix that let me know please
 
-        var command = "INSERT INTO Locker (locker_id, room_id, avail_status) VALUES (${info[0]}, ${info[1]}, ${info[2]})"
+    json_info = (req.params.id)
 
-        db.query(command)
+    split = json_info.split(',')
 
-        console.log("Information Inserted")
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+
+    var command = "INSERT INTO Locker (locker_id, serial_num, avail_status, room_id) VALUES (" + split[0] + ", "+ split[1] +", "+ split[2] + ", "+ split[3] + ")"
+    db.query(command)
+
+    console.log("Information Inserted")
+
+    res.send('Information Inserted')
 });
 
-
 //POST Equipment
-app.post("/equipment:info", async (req, res) => {
-    try {
+app.post("/equipment/post/:info", async (req, res) => {
 
-        //Im not sure how to do this part tbh
-        json_info = to_list(info)
+    json_info = (req.params.info)
 
-        var command = "INSET INTO Equipment (equipment_id, equipment_type_id, avail_status) VALUES (${info[0]}, ${info[1]}, ${info[2]})"
 
-        db.query(command)
+    console.log(split[1])
 
-        console.log("Information Inserted")
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+    var command = "INSERT INTO Equipment (equipment_id, equipment_type_id, avail_status) VALUES (" + split[0] + ", "+ split[1] +", "+ split[2] + ")"
+ 
+
+    db.query(command)
+
+    console.log("Information Inserted")
+    
+    res.send('Information Inserted')
+
 });
 
 
 //POST Reservation
-app.post("/reservations/:info", async (req, res) => {
-    try {
+app.post("/reservations/post/:info", async (req, res) => {
 
-        //Im not sure how to do this part tbh
-        json_info = to_list(info)
+    json_info = (req.params.info)
 
-        var command = "INSET INTO Reservation (reservation_id, equipment_id, locker_id, user_id, reserv_start, reserv_end, reserv_status) VALUES (${info[0]}, ${info[1]}, ${info[2]}, ${info[3]}, ${info[4]}, ${info[5]}, ${info[6]})"
+    split = json_info.split(',')
 
-        db.query(command)
 
-        console.log("Information Inserted")
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+    var command = "INSERT INTO Reservation (reservation_id, reserv_start, reserv_end,reserv_status,  equipment_id, locker_id, user_id) VALUES (" + split[0] + ", "+ split[1] +", "+ split[2]+", "+ split[3] +", "+ split[4] +", "+ split[5]+", "+ split[6]+  ")"
+ 
+
+    db.query(command)
+
+    console.log("Information Inserted")
+    res.send('Information Inserted')
 });
 
 
 
 //POST User
-app.post("/users/:info", async (req, res) => {
-    try {
+app.post("/users/post/:info", async (req, res) => {
 
-        //Im not sure how to do this part tbh
-        json_info = to_list(info)
 
-        var command = "INSERT INTO User (user_id, user_name, user_password, user_email, user_role, fal_stu_status) VALUES (${info[0]}, ${info[1]}, ${info[2]}, ${info[3]}, ${info[4]}, ${info[5]})"
+    json_info = (req.params.info)
 
-        db.query(command)
+    split = json_info.split(',')
 
-        console.log("Information Inserted")
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+
+    var command = "INSERT INTO User (user_id, user_name, user_email, user_role, falc_stu_status, user_password) VALUES (" + split[0] + ", "+ split[1] +", "+ split[2]+", "+ split[3] +", "+ split[4] +", "+ split[5]+  ")"
+ 
+
+    db.query(command)
+
+    console.log("Information Inserted")
+    res.send('Information Inserted')
 });
-<<<<<<< HEAD
-=======
-
-
-
-
 
 // select or GET requests
 
 //GET Reservations
 app.get("/reservations", async (req, res) => {
-    try {
-        const result = db.query("SELECT * FROM Reservation")
 
-        console.log(result)
+    db.query("SELECT * FROM Reservation", (err, result) => {
 
-        res.render({ data: result })
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+        console.log(JSON.stringify(result))
+
+        res.send(result)
+
+    });
 });
 
-
 //GET Reservation by User
-app.get("/reservations/:user_id", async (req, res) => {
-    try {
-        UserID = user_id
-        const result = db.query("SELECT * FROM Reservation where user_id = ${UserID}")
+app.get("/reservation-user/:user_id", async (req, res) => {
 
-        console.log(result)
+    UserID = req.params.user_id
 
-        res.render({ data: result })
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+    db.query("SELECT * FROM Reservation WHERE user_id = " + UserID, (err, result) => {
+
+        console.log(result[0])
+
+        res.send(JSON.stringify(result[0]))
+
+    });
 });
 
 
 //GET Lockers
 app.get("/lockers", async (req, res) => {
-    try {
-        const result = db.query("SELECT * FROM Locker")
 
-        console.log(result)
 
-        res.render({ data: result })
+    db.query("SELECT * FROM Locker", (err, result) => {
+
+        console.log(JSON.stringify(result))
+
+        res.send(result)
+
     }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
-});
-
+    );
+}
+);
 
 //GET Equipment
 app.get("/equipment", async (req, res) => {
-    try {
-        const result = db.query("SELECT * FROM Equipment")
+
+    db.query("SELECT * FROM Equipment", (err, result) => {
 
         console.log(result)
 
 
-        res.render({ data: result })
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+        res.send({ result })
+
+    });
 });
+
 
 
 //GET User
 app.get("/users", async (req, res) => {
-    try {
-        const result = db.query("SELECT * FROM User")
+    db.query("SELECT * FROM User", (err, result) => {
 
-        console.log(result)
+        console.log(JSON.stringify(result))
 
-        res.render({ data: result })
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+        res.send(result)
+    });
 });
 
 
@@ -372,98 +184,152 @@ app.get("/users", async (req, res) => {
 
 
 //UPDATE User by user_id
-app.post("/users/:user_id/:info", async (req, res) => {
-    try {
+app.put("/users/update/:info", async (req, res) => {
+ 
+ 
+    //the first value needs to be the user id and the rest the params
+    
+    json_info = (req.params.info)
 
-        //grab the user id
-        User_ID = user_id
+    split = json_info.split(',')
 
-        //Im not sure how to do this part tbh
-        json_info = to_list(info)
+    var command = "UPDATE User SET user_name ="+split[1] + ", user_email =" + split[2] + ", user_role = " + split[3]+", falc_stu_status =" + split[4]+", user_password =" + split[5] + " WHERE user_id =" +  split[0] 
 
-        var command = "UPDATE User SET (user_id = ${info[0]}, user_name =${info[1]}, user_password =${info[2]}, user_email =${info[3]}, user_role =${info[4]}, fal_stu_status=${info[5]}) WHERE user_id = ${user_id}"
-        db.query(command)
+    db.query(command)
 
-        console.log("Information Updated")
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+    console.log("Information Updated")
+
+    res.send('updated')
 });
 
 
 
 //UPDATE equipment by equipment_id
-app.post("/equipment/:equipment_id/:info", async (req, res) => {
-    try {
+app.put("/equipment/update/:info", async (req, res) => {
 
-        equip_id = equipment_id
 
-        //Im not sure how to do this part tbh
-        json_info = to_list(info)
+    //the first value needs to be the equipment id and the rest the params
 
-        var command = "UPDATE Equipment  SET (equipment_id = ${info[0]}, equipment_type_id = ${info[1}, avail_status = ${info[2]}) WHERE equipment_id = ${equip_id}"
-        db.query(command)
+    json_info = (req.params.info)
 
-        console.log("Information Updated")
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+    split = json_info.split(',')
+
+
+    //because of foreign constraints you cannot change the others
+
+    var command = "UPDATE Equipment  SET avail_status = "+split[1] + " WHERE equipment_id = "+split[0]
+    db.query(command)
+    console.log("Information Updated")
+
+    res.send('updated')
+
 });
 
 
 //UPDATE Locker by locker_id
-app.post("/lockers/:locker_id/:info", async (req, res) => {
-    try {
+app.put("/lockers/update/:info", async (req, res) => {
 
-        Locker_ID = locker_id
 
-        json_info = info
+   
+    //the first value needs to be the locker  id and the rest the params
 
-        var command = "UPDATE Locker SET (locker_id = ${info[0]}, room_id = ${info[1]}, avail_status = ${info[2]}) WHERE locker_id = ${Locker_ID}"
+    json_info = (req.params.info)
 
-        db.query(command)
+    split = json_info.split(',')
 
-        console.log("Information Updated")
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+
+    var command = "UPDATE Locker SET  serial_num = "+split[1] + ", avail_status = " + split[2] +   "WHERE locker_id ="+ split[0]
+
+    db.query(command)
+
+    console.log("Information Updated")
+    res.send('updated')
 });
-
 
 
 //UPDATE Reservation by user_id
-app.post("/reservations/:user_id/:info", async (req, res) => {
-    try {
+app.put("/reservations/update/:info", async (req, res) => {
 
-        
-        User_ID = user_id
+    //start with user id
 
-        json_info = to_list(info)
 
-        var command = "Update Reservation SET (reservation_id = ${info[0]}, equipment_id = ${info[1]}, locker_id = ${info[2]}, user_id = ${info[3]}, reserv_start = ${info[4]}, reserv_end =${info[5]}, reserv_status = ${info[6]}) WHERE user_id = ${User_ID}"
+    json_info = (req.params.info)
 
-        db.query(command)
+    split = json_info.split(',')
 
-        console.log("Information Updated")
-    }
-    catch (err) {
-        res.status(500).json({
-            message: err,
-        });
-    }
+    var command = "Update Reservation SET equipment_id = "+split[1] + ", locker_id ="+split[2] + ", user_id = "+split[3] + ", reserv_start = "+split[4] + ", reserv_end ="+split[5] + ", reserv_status = "+split[6] + " WHERE reservation_id ="+split[0] 
+
+    db.query(command)
+
+    console.log("Information Updated")
+    res.send('updated')
+});
+
+
+app.delete("/users/delete/:info", async (req,res) => {
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "DELETE FROM User WHERE user_id =" + split[0]
+
+    db.query(command)
+
+    console.log("delete")
+    res.send('deleted')
+
+});
+
+
+app.delete("/reservations/delete/:info", async (req,res) => {
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "DELETE FROM Reservation WHERE reservation_id =" + split[0]
+
+    db.query(command)
+
+    console.log("delete")
+    res.send('deleted')
+
 });
 
 
 
+app.delete("/lockers/delete/:info", async (req,res) => {
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "DELETE FROM Locker WHERE locker_id =" + split[0]
+
+    db.query(command)
+
+    console.log("delete")
+    res.send('deleted')
+
+});
+
+/*
+foreign key constraint cannot delete equipment
+app.delete("/equipment/delete/:info", async (req,res) => {
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "DELETE FROM Equipment WHERE equipment_id =" + split[0]
+
+    db.query(command)
+
+    console.log("delete")
+    res.send('deleted')
+
+});*/
 
 
 
@@ -471,8 +337,4 @@ app.post("/reservations/:user_id/:info", async (req, res) => {
 
 
 
-
-
-
-app.run();
->>>>>>> parent of e3dcec1 (DELETE statements)
+module.exports = { app }
