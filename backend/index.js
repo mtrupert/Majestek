@@ -29,6 +29,10 @@ app.listen(PORT, () => {
 });
 
 
+//READ ME. To Test on Postman when variables are involved, make it:
+// url/:info ; and in the PATH variable description add the data to be sent
+
+
 
 //POST requests
 
@@ -108,6 +112,29 @@ app.post("/users/post/:info", async (req, res) => {
     res.send('Information Inserted')
 });
 
+//POST Ticket
+app.post("/ticket/post/:info", async (req, res) => {
+
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+
+    var command = "INSERT INTO Ticket (ticket_id, ticket_desc, ticket_status, ticket_date, user_id) VALUES (" + split[0] + ", "+ split[1] +", "+ split[2]+", "+ split[3] +", "+ split[4] + ")"
+ 
+
+    db.query(command)
+
+    console.log("Information Inserted")
+    res.send('Information Inserted')
+});
+
+
+
+
+
+
 // select or GET requests
 
 //GET Reservations
@@ -170,6 +197,17 @@ app.get("/equipment", async (req, res) => {
 //GET User
 app.get("/users", async (req, res) => {
     db.query("SELECT * FROM User", (err, result) => {
+
+        console.log(JSON.stringify(result))
+
+        res.send(result)
+    });
+});
+
+
+//GET User
+app.get("/ticket", async (req, res) => {
+    db.query("SELECT * FROM Ticket", (err, result) => {
 
         console.log(JSON.stringify(result))
 
@@ -265,7 +303,30 @@ app.put("/reservations/update/:info", async (req, res) => {
     res.send('updated')
 });
 
+//UPDATE Ticket by ticket_id
+app.put("/ticket/update/:info", async (req, res) => {
 
+    //make ticket id the first variable
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "Update Ticket SET ticket_desc = "+split[1] + ", ticket_status ="+split[2] + ", ticket_date = "+split[3] + " WHERE user_id ="+split[0] 
+
+    db.query(command)
+
+    console.log("Information Updated")
+    res.send('updated')
+});
+
+
+
+
+// DELETE Statements
+
+
+//Delete User
 app.delete("/users/delete/:info", async (req,res) => {
 
     json_info = (req.params.info)
@@ -282,6 +343,8 @@ app.delete("/users/delete/:info", async (req,res) => {
 });
 
 
+
+//DELETE Reservation
 app.delete("/reservations/delete/:info", async (req,res) => {
 
     json_info = (req.params.info)
@@ -298,7 +361,7 @@ app.delete("/reservations/delete/:info", async (req,res) => {
 });
 
 
-
+//DELETE Locker
 app.delete("/lockers/delete/:info", async (req,res) => {
 
     json_info = (req.params.info)
@@ -332,6 +395,22 @@ app.delete("/equipment/delete/:info", async (req,res) => {
 });*/
 
 
+
+//DELETE Ticket
+app.delete("/ticket/delete/:info", async (req,res) => {
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "DELETE FROM Ticket WHERE ticket_id =" + split[0]
+
+    db.query(command)
+
+    console.log("delete")
+    res.send('deleted')
+
+});
 
 
 
