@@ -41,3 +41,27 @@ export default {
     }
 }
 </script>
+
+<style>
+
+/* Add specific styles for the view inventory page */
+.inventory-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+.inventory-title {
+  color: black; /* Set font color to black */
+}
+.inventory-item {
+  width: 300px;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: black; /* Set font color to black */
+}
+.inventory-table th,
+.inventory-table td {
+  color: black;
+}
+</style>

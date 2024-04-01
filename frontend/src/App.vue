@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-     <!-- Title Container -->
-     <div class="title-container">
+    <!-- Title Container -->
+    <div class="title-container">
       <h1 class="page-title">UH IT Device Reservations</h1>
     </div>
     <!-- Vertical Navigation Section -->
@@ -13,19 +13,44 @@
       <button @click="navigate('logout')">Logout</button>
     </div>
 
-    <!--Main Area of Page-->
+    <!-- Main Area of Page -->
     <div class="main-content">
       <!-- Two Main Buttons -->
       <div class="large-buttons">
-        <button @click="makeReservation">Make a Reservation <img src="./assets/clipboard_icon.png" alt="Make Reservations Icon" class="icon"></button>
-        <button @click="viewReservations">View Reservations <img src="./assets/computer_icon.png" alt="View Reservations Icon" class="icon"></button>
+        <button @click="navigate('make_reservation')">Make a Reservation <img src="./assets/clipboard_icon.png" alt="Make Reservations Icon" class="icon"></button>
+        <button @click="navigate('view_reservations')">View Reservations <img src="./assets/computer_icon.png" alt="View Reservations Icon" class="icon"></button>
       </div>
 
       <!-- Additional Content Sections -->
       <div v-if="currentSection === 'view_inventory'">
-        <h2>View Inventory</h2>
-        <!-- Add content related to viewing inventory -->
-      </div>
+        <!-- Template for view_inventory -->
+        <h2 style="color: black;">View Inventory</h2>
+        <div>
+          <label for="sortSelect">Sort by:</label>
+          <select id="sortSelect" v-model="sortOption">
+            <option value="name">Name</option>
+            <option value="availability">Availability</option>
+          </select>
+        </div>
+        <table class="inventory-table">
+          <thead>
+            <tr>
+              <th @click="sortBy('id')">Student ID</th>
+              <th @click="sortBy('name')">Name</th>
+              <th @click="sortBy('serialNumber')">Serial Number</th>
+              <th @click="sortBy('availability')">Availability</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in sortedInventory" :key="index">
+              <td>{{ item.id }}</td>
+              <td>{{ item.name }}</td>
+              <td>{{ item.serialNumber }}</td>
+              <td>{{ item.available ? 'Available' : 'Unavailable' }}</td>
+            </tr>
+          </tbody>
+        </table>
+  </div>
 
       <div v-if="currentSection === 'view_tickets'">
         <h2>View Support Tickets</h2>
@@ -54,31 +79,46 @@
   </div>
 </template>
 
+<!-- Starting Script for inventory -->
 <script>
 export default {
   data() {
     return {
-      currentSection: 'make_reservation' // Default section
+      currentSection: 'make_reservation',
+      inventory: [
+        { id: '123', name: 'Laptop', serialNumber: 'ABC123', available: true },
+        { id: '124',name: 'Locker', serialNumber: 'DEF456', available: false },
+        { id: '126',name: 'Locker', serialNumber: 'GHI789', available: true },
+      ],
+      sortOption: 'name'
+    }
+  },
+  computed: {
+    sortedInventory() {
+      return this.inventory.slice().sort((a, b) => {
+        if (this.sortOption === 'name') {
+          return a.name.localeCompare(b.name);
+        } else if (this.sortOption === 'serialNumber') {
+          return a.serialNumber.localeCompare(b.serialNumber);
+        } else if (this.sortOption === 'availability') {
+          return a.available - b.available;
+        }
+      });
     }
   },
   methods: {
     navigate(section) {
-      // Implement navigation logic based on the selected section
       this.currentSection = section;
     },
-    makeReservation() {
-      // Implement logic to handle the "Make Reservation" button click
-      this.currentSection = 'make_reservation';
-    },
-    viewReservations() {
-      // Implement logic to handle the "View Reservations" button click
-      this.currentSection = 'view_reservations';
-    },
+    sortBy(option) {
+      this.sortOption = option;
+    }
   },
 };
+// Ending Script for inventory
 </script>
 
-<style>
+<style scoped>
 body {
   margin: 0;
   padding: 0;
@@ -185,4 +225,5 @@ body {
 .large-buttons button:hover {
   background-color: red;
 }
+
 </style>
