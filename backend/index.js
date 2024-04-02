@@ -156,9 +156,9 @@ app.get("/reservation-user/:user_id", async (req, res) => {
 
     db.query("SELECT * FROM Reservation WHERE user_id = " + UserID, (err, result) => {
 
-        console.log(result[0])
+        console.log(result)
 
-        res.send(JSON.stringify(result[0]))
+        res.send(JSON.stringify(result))
 
     });
 });
