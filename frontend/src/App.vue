@@ -17,40 +17,17 @@
     <div class="main-content">
       <!-- Two Main Buttons -->
       <div class="large-buttons">
-        <button @click="navigate('make_reservation')">Make a Reservation <img src="./assets/clipboard_icon.png" alt="Make Reservations Icon" class="icon"></button>
-        <button @click="navigate('view_reservations')">View Reservations <img src="./assets/computer_icon.png" alt="View Reservations Icon" class="icon"></button>
+        <button @click="navigate('make_reservation')">Make a Reservation <img src="./assets/clipboard_icon.png"
+            alt="Make Reservations Icon" class="icon"></button>
+        <button @click="navigate('view_reservations')">View Reservations <img src="./assets/computer_icon.png"
+            alt="View Reservations Icon" class="icon"></button>
       </div>
 
       <!-- Additional Content Sections -->
       <div v-if="currentSection === 'view_inventory'">
-        <!-- Template for view_inventory -->
-        <h2 style="color: black;">View Inventory</h2>
-        <div>
-          <label for="sortSelect">Sort by:</label>
-          <select id="sortSelect" v-model="sortOption">
-            <option value="name">Name</option>
-            <option value="availability">Availability</option>
-          </select>
-        </div>
-        <table class="inventory-table">
-          <thead>
-            <tr>
-              <th @click="sortBy('id')">Student ID</th>
-              <th @click="sortBy('name')">Name</th>
-              <th @click="sortBy('serialNumber')">Serial Number</th>
-              <th @click="sortBy('availability')">Availability</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(item, index) in sortedInventory" :key="index">
-              <td>{{ item.id }}</td>
-              <td>{{ item.name }}</td>
-              <td>{{ item.serialNumber }}</td>
-              <td>{{ item.available ? 'Available' : 'Unavailable' }}</td>
-            </tr>
-          </tbody>
-        </table>
-  </div>
+        <h2>View Inventory</h2>
+        <!-- Add content related to viewing support tickets -->
+      </div>
 
       <div v-if="currentSection === 'view_tickets'">
         <h2>View Support Tickets</h2>
@@ -225,26 +202,4 @@ body {
 .large-buttons button:hover {
   background-color: red;
 }
-/* START SECTION FOR INVENTORY */
-/* Add specific styles for the view inventory page */
-.inventory-list {
-  display: flex;
-  flex-wrap: wrap;
-}
-.inventory-title {
-  color: black; /* Set font color to black */
-}
-.inventory-item {
-  width: 300px;
-  margin-bottom: 20px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  color: black; /* Set font color to black */
-}
-.inventory-table th,
-.inventory-table td {
-  color: black;
-}
-/* END SECTION FOR INVENTORY */
 </style>
