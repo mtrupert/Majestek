@@ -104,7 +104,7 @@ app.post("/room/post/:id", async (req, res) => {
     split = json_info.split(',')
 
 
-    var command = "INSERT INTO Room (room_id, building_id, room_desc, num_lockers) VALUES (" + split[0] + ", "+ split[1] +", "+ split[2] + ", "+ split[3] + ")"
+    var command = "INSERT INTO Room (room_id, building_name, room_desc, num_lockers) VALUES (" + split[0] + ", "+ split[1] +", "+ split[2] + ", "+ split[3] + ")"
     db.query(command)
 
     console.log("Information Inserted")
@@ -439,7 +439,7 @@ app.delete("/reservations/delete/:info", async (req,res) => {
 });
 
 
-//DELETE Reservation
+//DELETE Room
 app.delete("/room/delete/:info", async (req,res) => {
 
     json_info = (req.params.info)
