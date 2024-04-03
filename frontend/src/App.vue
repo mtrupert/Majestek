@@ -1,75 +1,81 @@
 <template>
   <div id="app">
-    <!-- Title Container -->
-    <div class="title-container">
+    <!-- Conditional rendering based on not being the login page -->
+    <div class="title-container" v-if="!isLoginPage">
       <h1 class="page-title">UH IT Device Reservations</h1>
     </div>
-    <!-- Vertical Navigation Section -->
-    <div class="vertical-nav">
+
+    <header v-if="!isLoginPage" class="vertical-nav">
       <img src="./assets/UHLOGO.jpg" alt="Logo" class="logo">
       <button @click="navigate('view_inventory')">View Inventory</button>
       <button @click="navigate('view_tickets')">View Support Tickets</button>
       <button @click="navigate('send_ticket')">Send Support Ticket</button>
       <button @click="navigate('logout')">Logout</button>
+      <router-link to="/login">
+        <span style="position:relative; top: 6px" class="material-icons">login</span>
+      </router-link>
+    </header>
+
+    <!-- Main Area of Page, always rendered but its content might change -->
+    <div class="main-content">
+      <!-- The router-view component displays the component for the current route. -->
+      <router-view />
     </div>
 
-    <!-- Main Area of Page -->
-    <div class="main-content">
-      <!-- Two Main Buttons -->
-      <div class="large-buttons">
-        <button @click="navigate('make_reservation')">Make a Reservation <img src="./assets/clipboard_icon.png"
-            alt="Make Reservations Icon" class="icon"></button>
-        <button @click="navigate('view_reservations')">View Reservations <img src="./assets/computer_icon.png"
-            alt="View Reservations Icon" class="icon"></button>
-      </div>
-
-      <!-- Additional Content Sections -->
-      <div v-if="currentSection === 'view_inventory'">
-        <h2>View Inventory</h2>
-        <!-- Add content related to viewing support tickets -->
-      </div>
-
-      <div v-if="currentSection === 'view_tickets'">
-        <h2>View Support Tickets</h2>
-        <!-- Add content related to viewing support tickets -->
-      </div>
-
-      <div v-if="currentSection === 'send_ticket'">
-        <h2>Send Support Ticket</h2>
-        <!-- Add content related to sending support ticket -->
-      </div>
-
-      <div v-if="currentSection === 'logout'">
-        <!-- Implement logic to logout user -->
-      </div>
-
-      <div v-if="currentSection === 'make_reservation'">
-        <h2>Make a Reservation</h2>
-        <!-- Add content/form to make a reservation -->
-      </div>
-
-      <div v-if="currentSection === 'view_reservations'">
-        <h2>View Reservations</h2>
-        <!-- Add content related to viewing reservations -->
-      </div>
+    <!-- Conditionally render these buttons only when not on the login page -->
+    <div class="large-buttons" v-if="!isLoginPage">
+      <button @click="navigate('make_reservation')">Make a Reservation <img src="./assets/clipboard_icon.png" alt="Make Reservations Icon" class="icon"></button>
+      <button @click="navigate('view_reservations')">View Reservations <img src="./assets/computer_icon.png" alt="View Reservations Icon" class="icon"></button>
     </div>
   </div>
 </template>
 
-<!-- Starting Script for inventory -->
 <script>
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
 export default {
+  name: 'App',
+  setup() {
+    const route = useRoute();
+    const isLoginPage = computed(() => route.path === '/login');
+    return { isLoginPage };
+  },
   data() {
-    return {}  
+    return {
+      currentSection: 'make_reservation',
+      inventory: [
+        { id: '123', name: 'Laptop', serialNumber: 'ABC123', available: true },
+        { id: '124',name: 'Locker', serialNumber: 'DEF456', available: false },
+        { id: '126',name: 'Locker', serialNumber: 'GHI789', available: true },
+      ],
+      sortOption: 'name'
+    }
+  },
+  computed: {
+    sortedInventory() {
+      return this.inventory.slice().sort((a, b) => {
+        if (this.sortOption === 'name') {
+          return a.name.localeCompare(b.name);
+        } else if (this.sortOption === 'serialNumber') {
+          return a.serialNumber.localeCompare(b.serialNumber);
+        } else if (this.sortOption === 'availability') {
+          return a.available - b.available;
+        }
+      });
+    }
   },
   methods: {
     navigate(section) {
       this.currentSection = section;
     },
-  }
+    sortBy(option) {
+      this.sortOption = option;
+    },
+  },
 };
-// Ending Script for inventory
 </script>
+
 
 <style scoped>
 body {
@@ -178,4 +184,26 @@ body {
 .large-buttons button:hover {
   background-color: red;
 }
+/* START SECTION FOR INVENTORY */
+/* Add specific styles for the view inventory page */
+.inventory-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+.inventory-title {
+  color: black; /* Set font color to black */
+}
+.inventory-item {
+  width: 300px;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: black; /* Set font color to black */
+}
+.inventory-table th,
+.inventory-table td {
+  color: black;
+}
+/* END SECTION FOR INVENTORY */
 </style>
