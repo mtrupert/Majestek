@@ -311,7 +311,7 @@ app.put("/reservations/update/:info", async (req, res) => {
 
     split = json_info.split(',')
 
-    var command = "Update Reservation SET equipment_id = "+split[1] + ", locker_id ="+split[2] + ", user_id = "+split[3] + ", reserv_start = "+split[4] + ", reserv_end ="+split[5] + ", reserv_status = "+split[6] + " WHERE reservation_id ="+split[0] 
+    var command = "Update Reservation SET  reserv_start = "+split[1] + ",  reserv_end="+split[2] + ", reserv_status = "+split[3] + ",  locker_id= "+split[4]   + " WHERE reservation_id ="+split[0] 
 
     db.query(command)
 
@@ -330,7 +330,7 @@ app.put("/room/update/:info", async (req, res) => {
 
     split = json_info.split(',')
 
-    var command = "Update Room SET building_name = "+split[1] + ", room_desc ="+split[2] + ", num_luckers = "+split[3] + " WHERE room_id ="+split[0] 
+    var command = "Update Room SET building_name = "+split[1] + ", room_desc ="+split[2] + ", num_lockers = "+split[3] + " WHERE room_id ="+split[0] 
 
     db.query(command)
 
@@ -350,7 +350,7 @@ app.put("/ticket/update/:info", async (req, res) => {
 
     split = json_info.split(',')
 
-    var command = "Update Ticket SET ticket_desc = "+split[1] + ", ticket_status ="+split[2] + ", ticket_date = "+split[3] + " WHERE user_id ="+split[0] 
+    var command = "Update Ticket SET ticket_desc = "+split[1] + ", ticket_status ="+split[2] + ", ticket_date = "+split[3] + " WHERE ticket_id ="+split[0] 
 
     db.query(command)
 
@@ -446,7 +446,7 @@ app.delete("/room/delete/:info", async (req,res) => {
 
     split = json_info.split(',')
 
-    var command = "DELETE FROM Roon WHERE room_id =" + split[0]
+    var command = "DELETE FROM Room WHERE room_id =" + split[0]
 
     db.query(command)
 
