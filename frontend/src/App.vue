@@ -15,11 +15,6 @@
 
     <!-- Main Area of Page -->
     <div class="main-content">
-      <!-- Two Main Buttons -->
-      <div class="large-buttons">
-        <button @click="navigate('make_reservation')">Make a Reservation <img src="./assets/clipboard_icon.png" alt="Make Reservations Icon" class="icon"></button>
-        <button @click="navigate('view_reservations')">View Reservations <img src="./assets/computer_icon.png" alt="View Reservations Icon" class="icon"></button>
-      </div>
 
       <!-- Additional Content Sections -->
       <div v-if="currentSection === 'view_inventory'">

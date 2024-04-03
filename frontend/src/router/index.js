@@ -3,6 +3,7 @@ import makeReserve from '../views/makeReserv.vue'
 import viewReserve from '../views/viewReserv.vue'
 import viewInventory from '../views/viewInvent.vue'
 import viewTickets from '../views/viewTickets.vue'
+import Home from '../views/home.vue'
 
 const routes = [
     {
@@ -24,11 +25,16 @@ const routes = [
         path: '/viewtickets',
         name: 'view-tickets',
         component: viewTickets
+    },
+    {
+        path: '/home',
+        name: 'home',
+        component: Home
     }
 ]
 
 const router = createRouter({
-    history: createWebHistory(process.env.BASE_URL),
+    history: createWebHistory(),
     routes
 })
 
