@@ -60,37 +60,13 @@
 <script>
 export default {
   data() {
-    return {
-      currentSection: 'make_reservation',
-      inventory: [
-        { id: '123', name: 'Laptop', serialNumber: 'ABC123', available: true },
-        { id: '124',name: 'Locker', serialNumber: 'DEF456', available: false },
-        { id: '126',name: 'Locker', serialNumber: 'GHI789', available: true },
-      ],
-      sortOption: 'name'
-    }
-  },
-  computed: {
-    sortedInventory() {
-      return this.inventory.slice().sort((a, b) => {
-        if (this.sortOption === 'name') {
-          return a.name.localeCompare(b.name);
-        } else if (this.sortOption === 'serialNumber') {
-          return a.serialNumber.localeCompare(b.serialNumber);
-        } else if (this.sortOption === 'availability') {
-          return a.available - b.available;
-        }
-      });
-    }
+    return {}  
   },
   methods: {
     navigate(section) {
       this.currentSection = section;
     },
-    sortBy(option) {
-      this.sortOption = option;
-    }
-  },
+  }
 };
 // Ending Script for inventory
 </script>
