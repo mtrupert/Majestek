@@ -32,15 +32,36 @@ app.listen(PORT, () => {
 //READ ME. To Test on Postman when variables are involved, make it:
 // url/:info ; and in the PATH variable description add the data to be sent
 
+//sample Postman url: http://localhost:8080/lockers/post/50,1,'yes', 1
+//it has to be this way not parameters or body if you know how to fix that let me know please
+
 
 
 //POST requests
 
+
+//POST Equipment
+app.post("/equipment/post/:info", async (req, res) => {
+
+    json_info = (req.params.info)
+
+
+    console.log(split[1])
+
+    var command = "INSERT INTO Equipment (equipment_id, avail_status) VALUES (" + split[0] + ", "+ split[1] + ")"
+  
+
+    db.query(command)
+
+    console.log("Information Inserted")
+    
+    res.send('Information Inserted')
+
+});
+
+
 //POST Locker
 app.post("/lockers/post/:id", async (req, res) => {
-
-    //sample Postman url: http://localhost:8080/lockers/post/50,1,'yes', 1
-    //it has to be this way not parameters or body if you know how to fix that let me know please
 
     json_info = (req.params.id)
 
@@ -55,24 +76,6 @@ app.post("/lockers/post/:id", async (req, res) => {
     res.send('Information Inserted')
 });
 
-//POST Equipment
-app.post("/equipment/post/:info", async (req, res) => {
-
-    json_info = (req.params.info)
-
-
-    console.log(split[1])
-
-    var command = "INSERT INTO Equipment (equipment_id, equipment_type_id, avail_status) VALUES (" + split[0] + ", "+ split[1] +", "+ split[2] + ")"
- 
-
-    db.query(command)
-
-    console.log("Information Inserted")
-    
-    res.send('Information Inserted')
-
-});
 
 
 //POST Reservation
@@ -93,24 +96,23 @@ app.post("/reservations/post/:info", async (req, res) => {
 });
 
 
+//POST Room
+app.post("/room/post/:id", async (req, res) => {
 
-//POST User
-app.post("/users/post/:info", async (req, res) => {
-
-
-    json_info = (req.params.info)
+    json_info = (req.params.id)
 
     split = json_info.split(',')
 
 
-    var command = "INSERT INTO User (user_id, user_name, user_email, user_role, falc_stu_status, user_password) VALUES (" + split[0] + ", "+ split[1] +", "+ split[2]+", "+ split[3] +", "+ split[4] +", "+ split[5]+  ")"
- 
-
+    var command = "INSERT INTO Room (room_id, building_id, room_desc, num_lockers) VALUES (" + split[0] + ", "+ split[1] +", "+ split[2] + ", "+ split[3] + ")"
     db.query(command)
 
     console.log("Information Inserted")
+
     res.send('Information Inserted')
 });
+
+
 
 //POST Ticket
 app.post("/ticket/post/:info", async (req, res) => {
@@ -131,11 +133,62 @@ app.post("/ticket/post/:info", async (req, res) => {
 });
 
 
+//POST User
+app.post("/users/post/:info", async (req, res) => {
+
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+
+    var command = "INSERT INTO User (user_id, user_name, user_email, user_role, falc_stu_status, user_password) VALUES (" + split[0] + ", "+ split[1] +", "+ split[2]+", "+ split[3] +", "+ split[4] +", "+ split[5]+  ")"
+ 
+
+    db.query(command)
+
+    console.log("Information Inserted")
+    res.send('Information Inserted')
+});
+
+
+
 
 
 
 
 // select or GET requests
+
+
+//GET Equipment
+app.get("/equipment", async (req, res) => {
+
+    db.query("SELECT * FROM Equipment", (err, result) => {
+
+        console.log(result)
+
+
+        res.send({ result })
+
+    });
+});
+
+
+//GET Lockers
+app.get("/lockers", async (req, res) => {
+
+
+    db.query("SELECT * FROM Locker", (err, result) => {
+
+        console.log(JSON.stringify(result))
+
+        res.send(result)
+
+    }
+    );
+}
+);
+
 
 //GET Reservations
 app.get("/reservations", async (req, res) => {
@@ -164,34 +217,28 @@ app.get("/reservation-user/:user_id", async (req, res) => {
 });
 
 
-//GET Lockers
-app.get("/lockers", async (req, res) => {
 
-
-    db.query("SELECT * FROM Locker", (err, result) => {
+//GET Room
+app.get("/room", async (req, res) => {
+    db.query("SELECT * FROM Room", (err, result) => {
 
         console.log(JSON.stringify(result))
 
         res.send(result)
-
-    }
-    );
-}
-);
-
-//GET Equipment
-app.get("/equipment", async (req, res) => {
-
-    db.query("SELECT * FROM Equipment", (err, result) => {
-
-        console.log(result)
-
-
-        res.send({ result })
-
     });
 });
 
+
+
+//GET Ticket
+app.get("/ticket", async (req, res) => {
+    db.query("SELECT * FROM Ticket", (err, result) => {
+
+        console.log(JSON.stringify(result))
+
+        res.send(result)
+    });
+});
 
 
 //GET User
@@ -205,42 +252,10 @@ app.get("/users", async (req, res) => {
 });
 
 
-//GET User
-app.get("/ticket", async (req, res) => {
-    db.query("SELECT * FROM Ticket", (err, result) => {
-
-        console.log(JSON.stringify(result))
-
-        res.send(result)
-    });
-});
-
 
 
 
 //UPDATE requests
-
-
-//UPDATE User by user_id
-app.put("/users/update/:info", async (req, res) => {
- 
- 
-    //the first value needs to be the user id and the rest the params
-    
-    json_info = (req.params.info)
-
-    split = json_info.split(',')
-
-    var command = "UPDATE User SET user_name ="+split[1] + ", user_email =" + split[2] + ", user_role = " + split[3]+", falc_stu_status =" + split[4]+", user_password =" + split[5] + " WHERE user_id =" +  split[0] 
-
-    db.query(command)
-
-    console.log("Information Updated")
-
-    res.send('updated')
-});
-
-
 
 //UPDATE equipment by equipment_id
 app.put("/equipment/update/:info", async (req, res) => {
@@ -285,6 +300,7 @@ app.put("/lockers/update/:info", async (req, res) => {
 });
 
 
+
 //UPDATE Reservation by user_id
 app.put("/reservations/update/:info", async (req, res) => {
 
@@ -302,6 +318,28 @@ app.put("/reservations/update/:info", async (req, res) => {
     console.log("Information Updated")
     res.send('updated')
 });
+
+
+
+//UPDATE Room by id
+app.put("/room/update/:info", async (req, res) => {
+
+    //start with room id
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "Update Room SET building_name = "+split[1] + ", room_desc ="+split[2] + ", num_luckers = "+split[3] + " WHERE room_id ="+split[0] 
+
+    db.query(command)
+
+    console.log("Information Updated")
+    res.send('updated')
+});
+
+
+
 
 //UPDATE Ticket by ticket_id
 app.put("/ticket/update/:info", async (req, res) => {
@@ -321,61 +359,33 @@ app.put("/ticket/update/:info", async (req, res) => {
 });
 
 
+//UPDATE User by user_id
+app.put("/users/update/:info", async (req, res) => {
+ 
+ 
+    //the first value needs to be the user id and the rest the params
+    
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "UPDATE User SET user_name ="+split[1] + ", user_email =" + split[2] + ", user_role = " + split[3]+", falc_stu_status =" + split[4]+", user_password =" + split[5] + " WHERE user_id =" +  split[0] 
+
+    db.query(command)
+
+    console.log("Information Updated")
+
+    res.send('updated')
+});
+
+
+
+
+
+
 
 
 // DELETE Statements
-
-
-//Delete User
-app.delete("/users/delete/:info", async (req,res) => {
-
-    json_info = (req.params.info)
-
-    split = json_info.split(',')
-
-    var command = "DELETE FROM User WHERE user_id =" + split[0]
-
-    db.query(command)
-
-    console.log("delete")
-    res.send('deleted')
-
-});
-
-
-
-//DELETE Reservation
-app.delete("/reservations/delete/:info", async (req,res) => {
-
-    json_info = (req.params.info)
-
-    split = json_info.split(',')
-
-    var command = "DELETE FROM Reservation WHERE reservation_id =" + split[0]
-
-    db.query(command)
-
-    console.log("delete")
-    res.send('deleted')
-
-});
-
-
-//DELETE Locker
-app.delete("/lockers/delete/:info", async (req,res) => {
-
-    json_info = (req.params.info)
-
-    split = json_info.split(',')
-
-    var command = "DELETE FROM Locker WHERE locker_id =" + split[0]
-
-    db.query(command)
-
-    console.log("delete")
-    res.send('deleted')
-
-});
 
 /*
 foreign key constraint cannot delete equipment
@@ -395,6 +405,56 @@ app.delete("/equipment/delete/:info", async (req,res) => {
 });*/
 
 
+//DELETE Locker
+app.delete("/lockers/delete/:info", async (req,res) => {
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "DELETE FROM Locker WHERE locker_id =" + split[0]
+
+    db.query(command)
+
+    console.log("delete")
+    res.send('deleted')
+
+});
+
+
+//DELETE Reservation
+app.delete("/reservations/delete/:info", async (req,res) => {
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "DELETE FROM Reservation WHERE reservation_id =" + split[0]
+
+    db.query(command)
+
+    console.log("delete")
+    res.send('deleted')
+
+});
+
+
+//DELETE Reservation
+app.delete("/room/delete/:info", async (req,res) => {
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "DELETE FROM Roon WHERE room_id =" + split[0]
+
+    db.query(command)
+
+    console.log("delete")
+    res.send('deleted')
+
+});
+
 
 //DELETE Ticket
 app.delete("/ticket/delete/:info", async (req,res) => {
@@ -404,6 +464,24 @@ app.delete("/ticket/delete/:info", async (req,res) => {
     split = json_info.split(',')
 
     var command = "DELETE FROM Ticket WHERE ticket_id =" + split[0]
+
+    db.query(command)
+
+    console.log("delete")
+    res.send('deleted')
+
+});
+
+
+
+//Delete User
+app.delete("/users/delete/:info", async (req,res) => {
+
+    json_info = (req.params.info)
+
+    split = json_info.split(',')
+
+    var command = "DELETE FROM User WHERE user_id =" + split[0]
 
     db.query(command)
 
