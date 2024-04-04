@@ -1,17 +1,21 @@
 <template>
-  <div class="login-container">
-    <h1>Login</h1>
-    <form @submit.prevent="handleLogin">
-      <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" v-model="loginForm.email" required>
+  <div class="bg">
+    <form class="login-form" @submit.prevent="login">
+      <h1>Login</h1>
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="email" id="username" v-model="credentials.username" required>
       </div>
-      <div>
+      <div class="form-group">
         <label for="password">Password:</label>
-        <input type="password" id="password" v-model="loginForm.password" required>
+        <input type="password" id="password" v-model="credentials.password" required>
       </div>
-      <button type="submit">Login</button>
+      <input type="submit" value="Login">
+      <button type="button" @click="forgotpassword" class="text-button">Forgot Password?</button>
     </form>
+    <div class="account-creation">
+    <button @click="createAccount" class="create-account">Create an Account</button>
+    </div>
   </div>
 </template>
 
@@ -52,40 +56,93 @@ methods: {
 }
 </script>
 
-<style scoped>
-body, html {
-background-color: white; /* Change the background of the entire page to white */
-margin: 0;
-padding: 0;
+<style>
+.bg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px; 
 }
 
-.login-container {
-max-width: 300px;
-margin: auto;
-margin-top: 100px;
-padding: 20px;
-border: 1px solid #ccc;
-border-radius: 5px;
-background-color: white; /* Ensure the login form background is white */
+.login-form {
+  width: 500px; 
+  padding: 40px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px; 
 }
 
-.login-container h1, label, button {
-color: red; /* Change text color to red */
+.text-button {
+  background: none;
+  border: none;
+  color: #ff0000; 
+  cursor: pointer;
+  text-decoration: none; /* Remove default underline */
+  margin-top: 10px; /* Add spacing between the buttons */
 }
 
-button {
-width: 100%;
-padding: 10px;
-margin-top: 20px;
-border: none;
-border-radius: 5px;
-background-color: red; /* Optionally, make the button red */
-color: white; /* Change button text color to white for contrast */
-cursor: pointer;
+.text-button:hover {
+  text-decoration: underline; /* Underline on hover */
 }
 
-button:hover {
-background-color: darkred; /* Darken the button on hover for a visual effect */
+.account-creation {
+  width: 500px; 
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px; 
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="email"],
+input[type="password"] {
+  width: 100%; 
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+input[type="submit"] {
+  width: 100%;
+  padding: 8px;
+  background-color: #fa8686;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: #ff0000;
+}
+
+.create-account {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px;
+  background-color: #4aa1ff;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.create-account:hover {
+  background-color: #0076f4;
 }
 </style>
 
