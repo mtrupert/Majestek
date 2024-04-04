@@ -7,6 +7,11 @@ import Home from '../views/home.vue'
 
 const routes = [
     {
+        path: '/',
+        name: 'home',
+        component: Home
+    },
+    {
         path: '/makereservation',
         name: 'make-reservation',
         component: makeReserve
@@ -25,11 +30,6 @@ const routes = [
         path: '/viewtickets',
         name: 'view-tickets',
         component: viewTickets
-    },
-    {
-        path: '/home',
-        name: 'home',
-        component: Home
     }
 ]
 
