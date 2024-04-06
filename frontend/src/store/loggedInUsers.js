@@ -26,7 +26,7 @@ export const useLoggedInUserStore = defineStore({
 
 
             console.log(decodedToken);
-            this.$route.push({
+            this.$router.push({
                 path: '/',
                 query: {
                     id: decodedToken.user_id,
