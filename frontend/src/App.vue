@@ -5,20 +5,16 @@
       <h1 class="page-title">UH IT Device Reservations </h1>
     </div>
     <!-- Vertical Navigation Section -->
-  <div class="vertical-nav" v-if="store.isLoggedIn">
+    <div class="vertical-nav">
       <img src="./assets/UHLOGO.jpg" alt="Logo" class="logo">
-      <li>
-        <RouterLink to="/viewinventory" v-if='store.role =="Student"'>
-          <button>   View Invtentory    </button>
-        </RouterLink>
-      </li>
-      <button @click="store.logout()">Logout</button>
-      <div>
-      {{ name }}
+      <!--Router Links-->
+      <div class="routing-links">
+        <router-link to="/view_inventory" tag="button" v-if='role =="Admin"'>View Inventory</router-link>
+        <router-link to="/view_tickets" tag="button" v-if='role =="Admin"'>View Support Tickets</router-link>
+        <router-link to="/send_ticket" tag="button">Send Support Ticket</router-link>
+        <router-link to="/logout" tag="button">Logout</router-link>
+      </div>
     </div>
-  </div>
-  
-
   <div id="routerView">
     <!-- Main Area of Page -->
     <RouterView />
@@ -57,40 +53,8 @@ export default {
       store,
       name
     };
-  },
-  data() {
-    return {
-      currentSection: 'make_reservation',
-      inventory: [
-        { id: '123', name: 'Laptop', serialNumber: 'ABC123', available: true },
-        { id: '124',name: 'Locker', serialNumber: 'DEF456', available: false },
-        { id: '126',name: 'Locker', serialNumber: 'GHI789', available: true },
-      ],
-      sortOption: 'name'
-    }
-  },
-  computed: {
-    sortedInventory() {
-      return this.inventory.slice().sort((a, b) => {
-        if (this.sortOption === 'name') {
-          return a.name.localeCompare(b.name);
-        } else if (this.sortOption === 'serialNumber') {
-          return a.serialNumber.localeCompare(b.serialNumber);
-        } else if (this.sortOption === 'availability') {
-          return a.available - b.available;
-        }
-      });
-    }
-  },
-  methods: {
-    navigate(section) {
-      this.currentSection = section;
-    },
-    sortBy(option) {
-      this.sortOption = option;
-    }
-  },
-};
+  }
+}
 // Ending Script for inventory
 </script>
 
@@ -160,21 +124,29 @@ body {
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.vertical-nav button {
-  display: block;
+.routing-links {
   width: 100%;
-  padding: 10px;
-  margin-top: 150px;
-  margin-bottom: 0px;
-  text-align: left;
-  border: none;
-  background-color: #fff;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  height: 75%;
+  padding: 5px;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  margin-top: 100px;
 }
 
-.vertical-nav button:hover {
-  background-color: #e0e0e0;
+.routing-links a{
+  display: block;
+  padding: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  border: 2px solid black; /* Add border around the router-link */
+  border-radius: 5px; /* Optional: Add border radius for rounded corners */
+  color: black;
+  text-decoration: none;
+}
+
+.routing-links a:hover {
+  background-color: lightgray;
 }
 
 .main-content {
@@ -182,34 +154,6 @@ body {
   margin-top: 125px;
   flex: 1;
   padding: 20px;
-}
-
-.large-buttons button:first-child {
-  margin-right: 20px; 
-}
-
-
-.large-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  margin-top: 50px;
-}
-
-.large-buttons button {
-  flex: 1;
-  padding: 10px 10px;
-  font-size: 35px;
-  background-color: #ff7575;
-  color: #fff;
-  border: 2px solid black;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.large-buttons button:hover {
-  background-color: red;
 }
 
 </style>

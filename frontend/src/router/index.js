@@ -53,6 +53,7 @@ const router = createRouter({
 }
 )
 
+
 router.beforeEach(async (to, from) => {
     const store = useLoggedInUserStore()
     if (
