@@ -1,14 +1,16 @@
 import { defineStore } from "pinia";
 import { loginUser } from "@/services/API";
 import { jwtDecode } from "jwt-decode";
+import { useLocalStorage } from "@vueuse/core";
+
 
 export const useLoggedInUserStore = defineStore({
     id: 'loggedInUser',
     state: () => {
         return {
-            id: "",
-            name: "",
-            role: "",
+            id: null,
+            user: null,
+            role: null,
             isLoggedIn: false
         }
     },
@@ -17,25 +19,26 @@ export const useLoggedInUserStore = defineStore({
             try {
             const token = await loginUser(email, password);
             const decodedToken = jwtDecode(token);
-            this.$patch({
-                isLoggedIn: true,
-                id: decodedToken.user_id,
-                name: decodedToken.user_name,
-                role: decodedToken.user_role
-            });
+            
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('id', decodedToken.id );
+            localStorage.setItem('name', decodedToken.name );
+            localStorage.setItem('role', decodedToken.role );      
+
+            this.user = decodedToken.name;
+            this.isLoggedIn = true;
+            this.id = decodedToken.id;
+            this.role = decodedToken.role;
+                
+            console.log(this.user);
+
 
 
             console.log(decodedToken);
             this.$router.push({
                 path: '/',
-                query: {
-                    id: decodedToken.user_id,
-                    name: decodedToken.user_name,
-                    role: decodedToken.user_role
-                }
             });
-            console.log("Login Successful")
-            return state
+            return 
             } catch (error) {
                 console.log(error.message)
             }
@@ -43,10 +46,17 @@ export const useLoggedInUserStore = defineStore({
         logout() {
             // Reset value after user log out
             this.$patch({
-              name: "",
-              role: "",
+              id: null,
+              user: null,
+              role: null,
               isLoggedIn: false
             });
+
+            localStorage.removeItem('user');
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('role');
+            localStorage.removeItem('id');
+
             this.$router.push("/login");
             console.log("You have been logged out!")
           },
@@ -54,10 +64,20 @@ export const useLoggedInUserStore = defineStore({
 
     },
     getters: {
-        loginName(state) {
-            return state.name
+        currentUser() {
+          return this.user;
+        },
+        isAuthenticated() {
+          return this.isLoggedIn;
+        },
+        currentRole() {
+            return this.role;
+        },
+        currentId() {
+            return this.id;
         }
-    }   
+      }
+    
 
     
 });
