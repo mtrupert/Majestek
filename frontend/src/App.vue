@@ -8,14 +8,16 @@
   <div class="vertical-nav" v-if="store.isLoggedIn">
       <img src="./assets/UHLOGO.jpg" alt="Logo" class="logo">
       <li>
-        <RouterLink to="/viewinventory" v-if='store.role =="Student"'>
+        <RouterLink to="/viewinventory" v-if='role="Admin"'>
           <button>   View Invtentory    </button>
         </RouterLink>
       </li>
+      <li>
+        <RouterLink to="/all-reservations" v-if='role="Admin"'>
+          <button>   Reservations    </button>
+        </RouterLink>
+      </li>
       <button @click="store.logout()">Logout</button>
-      <div>
-      {{ name }}
-    </div>
   </div>
   
 
@@ -38,24 +40,14 @@ import { RouterLink, RouterView } from 'vue-router';
 import { useLoggedInUserStore } from './store/loggedInUsers'
 
 export default {
-  mounted() {
-    const id = this.$route.query.id;
-    const name = this.$route.query.name;
-    const role = this.$route.query.role;
-
-    // Use the state properties as needed
-    console.log('User ID:', id);
-    console.log('User Name:', name);
-    console.log('User Role:', role);
-
-    },
   setup() {
     const store = useLoggedInUserStore();
-
-    const name = store.loginName
     return {
       store,
-      name
+      username: store.currentUser,
+      role: store.currentRole,
+      id: store.currentId,
+      isLoggedIn: store.isAuthenticated
     };
   },
   data() {
@@ -66,7 +58,12 @@ export default {
         { id: '124',name: 'Locker', serialNumber: 'DEF456', available: false },
         { id: '126',name: 'Locker', serialNumber: 'GHI789', available: true },
       ],
-      sortOption: 'name'
+      sortOption: 'name',
+
+      username: null,
+      isLoggedIn: null,
+      role: null,
+      id: null
     }
   },
   computed: {
@@ -131,7 +128,7 @@ body {
 
 .page-title {
   margin: 0; /* Remove default margin */
-  color: black; 
+  color: white; 
   font-size: 65px;
   font-family: Aptos, Calibri, sans-serif;
   font-weight: 370;
@@ -213,3 +210,4 @@ body {
 }
 
 </style>
+
