@@ -4,6 +4,7 @@ const mysql = require('mysql');
 const { createConnection } = require('net');
 const cors = require ('cors')
 const jwt = require('jsonwebtoken')
+const { generateToken, getMailOptions, getMailPassword } = require('./service');
 
 require("dotenv").config();
 
@@ -16,6 +17,9 @@ app.use(
         origin: "*"
     })
 )
+
+
+
 
 
 PORT = 8080;
@@ -46,6 +50,78 @@ app.listen(PORT, () => {
 // url/:info ; and in the PATH variable description add the data to be sent
 
 
+app.post('/register', (req, res) =>{
+    const { email } = req.body;
+    const { user } = req.body;
+    const { pass } = req.body;
+
+    if (!email) {
+        res.status(400).send({
+            message: "Invalid email"
+        });
+    }
+
+    const token = generateToken(email, user, pass);
+
+    const link = `http://localhost:8080/verify-email?token=${token}`;
+    console.log("Token Created.");
+
+    console.log("Mail request made.")
+
+    getMailOptions(email, link, (error) => {
+        if (error) {
+            res.status(500).send("Can't send email");
+            console.log(error);
+        } else {
+            res.status(200).send("Email sent");
+            console.log("Completed");
+        }
+
+    })
+}    
+);
+
+app.get("/verify-email", (req, res) => {
+    const token = req.query.token;
+    if (!token) {
+        res.status(401).send("Invalid user token");
+        return;
+    }
+
+    let decodedToken;
+    try {
+        decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    } catch {
+        res.status(401).send("Invalid authentication credentials");
+        return;
+    }
+
+    if (
+        !decodedToken.hasOwnProperty("email") || !decodedToken.hasOwnProperty("expirationDate")
+    ) {
+        res.status(401).send("Invalid authenication credentials.");
+        return;
+    }
+
+    const expirationDate = new Date(decodedToken.expirationDate);
+
+    if (expirationDate < new Date()) {
+        res.status(401).send("Token has expired.");
+        return;
+    }
+    res.status(200).send("Verification Successful");
+    console.log("Verification successful");
+
+    const {user, pass, email} = decodedToken;
+
+    var command = `INSERT INTO User (user_name, user_password, user_email, user_role) VALUES ( "${user}", "${pass}", "${email}", "User")`;
+
+    db.query(command);
+
+    console.log("User Created");
+
+}
+);
 
 //POST requests
 
@@ -219,13 +295,20 @@ app.post("/ticket/post/:info", async (req, res) => {
 //GET Reservations
 app.get("/reservations", async (req, res) => {
 
-    db.query("SELECT * FROM Reservation", (err, result) => {
+    command1 = "SELECT reserv_start, user_name, user_email, equipment_type from Reservation "
+    command2 = "JOIN Equipment ON Equipment.equipment_id = Reservation.equipment_id "
+    command3 = "JOIN User ON User.user_id = Reservation.user_id;"
 
-        console.log(JSON.stringify(result))
+    command = command1 + command2 + command3;
 
-        res.send(result)
+    db.query(command, (err, results) => {
+
+        console.log(results);
+
+        res.json(results)
 
     });
+ 
 });
 
 //GET Reservation by User
