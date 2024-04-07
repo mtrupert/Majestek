@@ -1,4 +1,7 @@
+import router from '@/router';
 import axios from 'axios';
+import { createRouter, createWebHistory } from "vue-router"
+
 
 const baseURL = 'http://localhost:8080'; // Update this with your backend URL
 
@@ -62,15 +65,7 @@ export const API = {
   },
 
   // GET requests
-  async getAllReservations() {
-    try {
-      const response = await axiosInstance.get('/reservations');
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching reservations:', error);
-      throw error;
-    }
-  },
+  
 
 
   async getReservationByUser(userId) {
@@ -186,15 +181,6 @@ export const API = {
   },
 };
 
-export async function getAllReservations() {
-  try {
-    const response = await axiosInstance.get('/reservations');
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching reservations:', error);
-    throw error;
-  }
-}
 
 export async function getAllUsers() {
   try {
@@ -219,3 +205,33 @@ export async function loginUser(email, password) {
 } catch (error) {
   console.log(error.response.data.message)
 }};
+
+export async function getAllReservations() {
+  try {
+    const response = await axiosInstance.get('/reservations');
+    console.log(response.data);
+    return response.data
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function registerUser(email, username, password) {
+  try {
+    const response = await axiosInstance.post('/register', {
+      email: email,
+      username: username,
+      password: password
+    });
+
+    console.log(response)
+    console.log("Email sent")
+    
+    this.$router.push("/login");
+    return { message: "Check email for Verification" }
+    
+} catch (error) {
+  console.log(error.response.data.message)
+}
+};
+

@@ -7,14 +7,18 @@
     <!-- Vertical Navigation Section -->
     <div class="vertical-nav">
       <img src="./assets/UHLOGO.jpg" alt="Logo" class="logo">
-      <!--Router Links-->
-      <div class="routing-links">
-        <router-link to="/view_inventory" tag="button" v-if='role =="Admin"'>View Inventory</router-link>
-        <router-link to="/view_tickets" tag="button" v-if='role =="Admin"'>View Support Tickets</router-link>
-        <router-link to="/send_ticket" tag="button">Send Support Ticket</router-link>
-        <router-link to="/logout" tag="button">Logout</router-link>
-      </div>
+      <li>
+        <RouterLink to="/viewinventory" v-if='store.role =="Student"'>
+          <button>   View Invtentory    </button>
+        </RouterLink>
+      </li>
+      <button @click="store.logout()">Logout</button>
+      <div>
+      {{ name }}
     </div>
+  </div>
+  
+
   <div id="routerView">
     <!-- Main Area of Page -->
     <RouterView />
@@ -34,27 +38,49 @@ import { RouterLink, RouterView } from 'vue-router';
 import { useLoggedInUserStore } from './store/loggedInUsers'
 
 export default {
-  mounted() {
-    const id = this.$route.query.id;
-    const name = this.$route.query.name;
-    const role = this.$route.query.role;
-
-    // Use the state properties as needed
-    console.log('User ID:', id);
-    console.log('User Name:', name);
-    console.log('User Role:', role);
-
-    },
   setup() {
     const store = useLoggedInUserStore();
-
-    const name = store.loginName
     return {
       store,
-      name
+      username: store.currentUser,
+      role: store.currentRole,
+      id: store.currentId,
+      isLoggedIn: store.isAuthenticated
     };
-  }
-}
+  },
+  data() {
+    return {
+      currentSection: 'make_reservation',
+      inventory: [
+        { id: '123', name: 'Laptop', serialNumber: 'ABC123', available: true },
+        { id: '124',name: 'Locker', serialNumber: 'DEF456', available: false },
+        { id: '126',name: 'Locker', serialNumber: 'GHI789', available: true },
+      ],
+      sortOption: 'name'
+    }
+  },
+  computed: {
+    sortedInventory() {
+      return this.inventory.slice().sort((a, b) => {
+        if (this.sortOption === 'name') {
+          return a.name.localeCompare(b.name);
+        } else if (this.sortOption === 'serialNumber') {
+          return a.serialNumber.localeCompare(b.serialNumber);
+        } else if (this.sortOption === 'availability') {
+          return a.available - b.available;
+        }
+      });
+    }
+  },
+  methods: {
+    navigate(section) {
+      this.currentSection = section;
+    },
+    sortBy(option) {
+      this.sortOption = option;
+    }
+  },
+};
 // Ending Script for inventory
 </script>
 
@@ -95,7 +121,7 @@ body {
 
 .page-title {
   margin: 0; /* Remove default margin */
-  color: black; 
+  color: white; 
   font-size: 65px;
   font-family: Aptos, Calibri, sans-serif;
   font-weight: 370;
@@ -157,3 +183,4 @@ body {
 }
 
 </style>
+
