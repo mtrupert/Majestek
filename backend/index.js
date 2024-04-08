@@ -295,7 +295,7 @@ app.post("/ticket/post/:info", async (req, res) => {
 //GET Reservations
 app.get("/reservations", async (req, res) => {
 
-    command1 = "SELECT reserv_start, user_name, user_email, equipment_type from Reservation "
+    command1 = "SELECT reservation_id, reserv_start, user_name, user_email, equipment_type from Reservation "
     command2 = "JOIN Equipment ON Equipment.equipment_id = Reservation.equipment_id "
     command3 = "JOIN User ON User.user_id = Reservation.user_id;"
 
@@ -507,18 +507,24 @@ app.delete("/users/delete/:info", async (req,res) => {
 
 
 //DELETE Reservation
-app.delete("/reservations/delete/:info", async (req,res) => {
+app.delete("/reservations/delete", async (req,res)  => {
 
-    json_info = (req.params.info)
+    const { id } = req.body
 
-    split = json_info.split(',')
+    try {
+        db.query(`DELETE FROM Reservation WHERE reservation_id = "${id}";`, (err, result) => {
 
-    var command = "DELETE FROM Reservation WHERE reservation_id =" + split[0]
+            console.log(result)
+            console.log("deletion complete")
+            
 
-    db.query(command)
+        });
 
-    console.log("delete")
-    res.send('deleted')
+        return
+
+    } catch (err) {
+        res.status(500).send('Server error');
+    }; 
 
 });
 
