@@ -7,6 +7,7 @@ import viewTickets from '../views/viewTickets.vue'
 import home from '../views/home.vue'
 import login from '../views/login.vue'
 import register from '../views/registration.vue'
+import forgotPassword from '../views/forgotPassword.vue'
 
 
 
@@ -42,6 +43,11 @@ const router = createRouter({
             path: '/login',
             name: 'login',
             component: login
+        },
+        {
+            path: '/forgotpassword',
+            name: 'forgot-password',
+            component: forgotPassword
         },
         {
             path: '/registration',
