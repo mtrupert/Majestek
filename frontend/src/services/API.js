@@ -108,16 +108,6 @@ export const API = {
     }
   },
 
-  async getAllTickets() {
-    try {
-      const response = await axiosInstance.get('/ticket');
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching tickets:', error);
-      throw error;
-    }
-  },
-
   // PUT requests
   async updateUserInfo(userInfo) {
     try {
@@ -235,3 +225,12 @@ export async function registerUser(email, username, password) {
 }
 };
 
+export async function getAllTickets() {
+  try {
+    const response = await axiosInstance.get('/ticket');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching tickets:', error);
+    throw error;
+  }
+}
