@@ -5,7 +5,7 @@
       <h1 class="page-title">UH IT Device Reservations </h1>
     </div>
     <!-- Vertical Navigation Section -->
-    <div class="vertical-nav">
+    <div class="vertical-nav" v-if="store.isLoggedIn">
       <img src="./assets/UHLOGO.jpg" alt="Logo" class="logo">
       <li>
         <RouterLink to="/viewinventory" v-if='store.role =="Student"'>
