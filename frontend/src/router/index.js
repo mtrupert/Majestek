@@ -7,6 +7,7 @@ import viewTickets from '../views/viewTickets.vue'
 import home from '../views/home.vue'
 import login from '../views/login.vue'
 import register from '../views/registration.vue'
+import makeTicket from '../views/makeTicket.vue'
 
 
 
@@ -48,6 +49,11 @@ const router = createRouter({
             name: 'regstration',
             component: register
         },
+        {
+            path:'/maketicket',
+            name:'maketicket',
+            component: makeTicket
+        }
         
     ],
 }
