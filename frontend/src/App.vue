@@ -5,34 +5,22 @@
       <h1 class="page-title">UH IT Device Reservations </h1>
     </div>
     <!-- Vertical Navigation Section -->
-    <div class="vertical-nav">
+    <div class="vertical-nav" v-if="store.isLoggedIn">
       <img src="./assets/UHLOGO.jpg" alt="Logo" class="logo">
-      <li>
-        <RouterLink to="/viewinventory" v-if='store.role =="Student"'>
-          <button>   View Invtentory    </button>
-        </RouterLink>
+      <li class="routing-links">
+        <RouterLink to="/viewinventory" tag="button" v-if='store.role=="admin"'>View Inventory</RouterLink>
+        <RouterLink to="/viewtickets" tag="button" v-if='store.role=="admin"'>View Tickets</RouterLink>
+        <RouterLink to="/maketicket" tag="button">Send Support Ticket</RouterLink>
+        <button @click="store.logout()">Logout</button>
       </li>
-      <button @click="store.logout()">Logout</button>
-      <div>
-      {{ name }}
+    </div>
+    <div id="routerView">
+      <!-- Main Area of Page -->
+      <RouterView />
     </div>
   </div>
-  
-
-  <div id="routerView">
-    <!-- Main Area of Page -->
-    <RouterView />
-  </div>
-
-    
-    
-
-    
-</div>
-  
 </template>
 
-<!-- Starting Script for inventory -->
 <script>
 import { RouterLink, RouterView } from 'vue-router';
 import { useLoggedInUserStore } from './store/loggedInUsers'
@@ -47,41 +35,8 @@ export default {
       id: store.currentId,
       isLoggedIn: store.isAuthenticated
     };
-  },
-  data() {
-    return {
-      currentSection: 'make_reservation',
-      inventory: [
-        { id: '123', name: 'Laptop', serialNumber: 'ABC123', available: true },
-        { id: '124',name: 'Locker', serialNumber: 'DEF456', available: false },
-        { id: '126',name: 'Locker', serialNumber: 'GHI789', available: true },
-      ],
-      sortOption: 'name'
-    }
-  },
-  computed: {
-    sortedInventory() {
-      return this.inventory.slice().sort((a, b) => {
-        if (this.sortOption === 'name') {
-          return a.name.localeCompare(b.name);
-        } else if (this.sortOption === 'serialNumber') {
-          return a.serialNumber.localeCompare(b.serialNumber);
-        } else if (this.sortOption === 'availability') {
-          return a.available - b.available;
-        }
-      });
-    }
-  },
-  methods: {
-    navigate(section) {
-      this.currentSection = section;
-    },
-    sortBy(option) {
-      this.sortOption = option;
-    }
-  },
-};
-// Ending Script for inventory
+  }
+}
 </script>
 
 <style scoped>
@@ -145,7 +100,7 @@ body {
   left: 0; /* Align it to the left of the viewport */
   height: 100vh; /* Make it span the entire viewport height */
   width: 150px;
-  background-color: #f0f0f0;
+  background-color: #d4d4d4;
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
@@ -166,6 +121,7 @@ body {
   margin-bottom: 10px;
   text-align: center;
   border: 2px solid black; /* Add border around the router-link */
+  background-color: rgb(255, 156, 156);
   border-radius: 5px; /* Optional: Add border radius for rounded corners */
   color: black;
   text-decoration: none;

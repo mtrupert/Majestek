@@ -1,7 +1,7 @@
 <template>
   <div class="home-container">
     
-    <router-link to="/makereservation" class="home-button"> <img src="../assets/clipboard_icon.png" class="icon"></router-link>
+    <router-link to="/makereservation" class="home-button">Make a Reservation<img src="../assets/clipboard_icon.png" class="icon"></router-link>
     <router-link to="/viewreservations" class="home-button">View Device/Locker Reservation <img src="../assets/computer_icon.png" class ="icon"></router-link>   
   </div>
 </template>
