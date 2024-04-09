@@ -13,7 +13,6 @@
         <RouterLink to="/maketicket" tag="button">Send Support Ticket</RouterLink>
         <button @click="store.logout()">Logout</button>
       </li>
-
     </div>
     <div id="routerView">
       <!-- Main Area of Page -->
@@ -22,7 +21,6 @@
   </div>
 </template>
 
-<!-- Starting Script for inventory -->
 <script>
 import { RouterLink, RouterView } from 'vue-router';
 import { useLoggedInUserStore } from './store/loggedInUsers'
