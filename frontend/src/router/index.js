@@ -9,6 +9,7 @@ import login from '../views/login.vue'
 import register from '../views/registration.vue'
 import makeTicket from '../views/makeTicket.vue'
 import forgotPassword from '../views/forgotPassword.vue'
+import adminReservation from '../views/adminReservations.vue'
 
 
 
@@ -59,6 +60,11 @@ const router = createRouter({
             path:'/maketicket',
             name:'maketicket',
             component: makeTicket
+        },
+        {
+            path: '/adminreservations',
+            name: 'adminreservations',
+            component: adminReservation
         }
         
     ],

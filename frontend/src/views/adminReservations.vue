@@ -33,7 +33,6 @@
 
 import { useLoggedInUserStore } from '@/store/loggedInUsers';
 import { getAllReservations, deleteReservation } from '../services/API';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 export default {

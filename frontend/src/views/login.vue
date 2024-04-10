@@ -11,15 +11,10 @@
         <input type="password" id="password" v-model="password" required>
       </div>
       <input type="submit" value="Login">
-        <router-link to="/forgotpassword">
-            <button type="button" class="text-button">Forgot Password?</button>
-        </router-link>
-      <button type="button" @click="forgotpassword" class="text-button">Forgot Password?</button>
+        <router-link to="/forgotpassword">Forgot Password?</router-link>
     </form>
     <div class="account-creation">
-      <router-link to="/registration">
-        <button @click="createAccount" class="create-account">Create an Account</button>
-      </router-link>
+      <router-link to="/registration">Create a Account</router-link>
     </div>
   </div>
 </template>
