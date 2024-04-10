@@ -97,15 +97,6 @@ export async function getAllEquipment() {
   }
 }
 
-export async function getAllUsers() {
-  try {
-    const response = await axiosInstance.get('/users');
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching users:', error);
-    throw error;
-  }
-}
 
 // PUT requests
 export async function updateUserInfo(userInfo) {
