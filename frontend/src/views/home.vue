@@ -31,12 +31,13 @@
 .home-container {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-top: 75px;
 }
 
 .home-button {
   display: block;
   width: 50%;
+  height: 500px;
   padding: 5%;
   text-align: center;
   background-color: red;
@@ -44,7 +45,7 @@
   text-decoration: none;
   border: none;
   border-radius: 25px;
-  font-size: 20px;
+  font-size: 30px;
   line-height: 1.5;
   margin-right: 20px;
 }
@@ -54,7 +55,7 @@
 }
 
 .icon {
-  height: 75%;
+  height: 70%;
   margin-top: 50px;
 }
 </style>
