@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <!-- Step 1: Enter email address -->
-        <div v-if="!resetStep" class="form-container">
+        <div v-if="emailStep" class="form-container">
             <h1>Forgot Password</h1>
             <form @submit.prevent="sendResetLink">
                 <label for="email">Email:</label>
@@ -10,8 +10,20 @@
             </form>
         </div>
 
+        <div v-if="codeStep" class="form-container">
+            <h1>Code Confirmation</h1>
+            <form @submit.prevent="sendCode">
+                <label for="email">Code:</label>
+                <input type="text" id="email" v-model="confirmationCode" placeholder="Enter Code" required>
+                <button type="submit">Submit</button>
+                <br>
+                <button @click="sendResetLink()" type="submit">Resend Code</button>
+                <p  v-if="codeError"> {{ codeError }}  </p>
+            </form>
+        </div>
+
         <!-- Step 2: Reset password -->
-        <div v-if="resetStep === 1" class="form-container">
+        <div v-if="resetStep" class="form-container">
             <h1>Reset Password</h1>
             <form @submit.prevent="resetPassword">
                 <label for="newPassword">New Password:</label>
@@ -26,22 +38,54 @@
 
 <!--This is just a possible start for the functionality of the reset password process. Can remove if needed.-->
 <script>
+
+import { generateRandomSixDigitNumber } from '@/services/API';
+import { passwordLink, updatePassword } from '@/services/API';
+
+
+
 export default {
+  mounted() {
+    this.emailStep = true;
+    this.code = generateRandomSixDigitNumber();
+    console.log(this.code);
+  },
   data() {
     return {
       email: '',
       newPassword: '',
       confirmPassword: '',
-      resetStep: 0  // 0 for email input step, 1 for reset password step
+      code: null,
+      confirmationCode: null,
+      emailStep: false,  // 0 for email input step, 1 for reset password step
+      codeStep: false,
+      resetStep: false,
+      codeError: null,
     };
   },
   methods: {
-    sendResetLink() {
+    async sendResetLink() {
       // Send reset link logic goes here (e.g., send email with reset link)
       // Assuming the link redirects to the same page and sets resetStep to 1
-      this.resetStep = 1;
+      try {
+        await passwordLink(this.email, this.code);
+        this.emailStep = false;
+        this.codeStep = true;
+      } catch (err) {
+        console.log(err);
+        this.$router.push('/forgotpassword');
+      }
     },
-    resetPassword() {
+    sendCode() {
+        console.log(this.confirmationCode);
+        if (this.confirmationCode == this.code) {
+            this.codeStep = false;
+            this.resetStep = true;
+        } else {
+            this.codeError = "Invalid Code"
+        }
+    },
+    async resetPassword() {
       // Password reset logic goes here
       if (this.newPassword !== this.confirmPassword) {
         alert('Passwords do not match');
@@ -49,6 +93,16 @@ export default {
       }
       // Passwords match, continue with reset logic
       console.log('Reset password logic...');
+      console.log(this)
+      
+      try {
+        const response = await updatePassword(this.email, this.newPassword);
+        console.log(response);
+        this.$router.push('/login')
+      } catch (err) {
+        console.log(err);
+      }
+
     }
   }
 };
@@ -89,6 +143,12 @@ export default {
         margin-bottom: 10px;
         border: 1px solid #ccc;
         border-radius: 4px;
+    }
+
+    p {
+        color: #e60000;
+        text-align: center;
+        font-size: smaller;
     }
 
     button {
