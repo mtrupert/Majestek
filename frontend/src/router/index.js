@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router"
 import { useLoggedInUserStore } from "@/store/loggedInUsers"
 import makeReserve from '../views/makeReserv.vue'
-import viewReserve from '../views/viewReserv.vue'
+import viewReserve from '../view/userReservation.vue'
 import viewInventory from '../views/viewInvent.vue'
 import viewTickets from '../views/viewTickets.vue'
 import home from '../views/home.vue'
