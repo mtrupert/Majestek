@@ -236,7 +236,7 @@ export async function passwordLink(email, code) {
 }
 
 export async function updatePassword(email, password) {
-  const response = await axiosInstance.post('/users/password', {
+  const response = await axiosInstance.put('/users/password', {
     email: email,
     password, password 
   });
