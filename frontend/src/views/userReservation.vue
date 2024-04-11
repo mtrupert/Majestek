@@ -22,8 +22,23 @@
       </div>
     </div>
   </template>
+
+
   <script>
+
+  import { useLoggedInUserStore } from '@/store/loggedInUsers';
+
   export default {
+    setup() {
+      const store = useLoggedInUserStore();
+
+      return {
+        store,
+        username: store.currentUser,
+        role: store.currentRole,
+        id: store.currentId
+      }
+    },
     data() {
       return {
         reservations: [
