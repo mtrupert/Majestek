@@ -1,10 +1,11 @@
-const { info } = require('console');
+const { info, error } = require('console');
 const express = require('express')
 const mysql = require('mysql');
 const { createConnection } = require('net');
 const cors = require ('cors')
 const jwt = require('jsonwebtoken')
 const { generateToken, getMailOptions, getMailPassword } = require('./service');
+const { exit } = require('process');
 
 require("dotenv").config();
 
@@ -55,6 +56,8 @@ app.post('/register', (req, res) =>{
     const { user } = req.body;
     const { pass } = req.body;
 
+    console.log(user, email, pass);
+
     if (!email) {
         res.status(400).send({
             message: "Invalid email"
@@ -72,12 +75,11 @@ app.post('/register', (req, res) =>{
         if (error) {
             res.status(500).send("Can't send email");
             console.log(error);
-        } else {
-            res.status(200).send("Email sent");
-            console.log("Completed");
-        }
-
+        } 
     })
+
+    res.status(200).send("Email sent");
+    console.log("Completed");
 }    
 );
 
@@ -112,9 +114,12 @@ app.get("/verify-email", (req, res) => {
     res.status(200).send("Verification Successful");
     console.log("Verification successful");
 
-    const {user, pass, email} = decodedToken;
+    const {email, user, pass} = decodedToken;
 
-    var command = `INSERT INTO User (user_name, user_password, user_email, user_role) VALUES ( "${user}", "${pass}", "${email}", "User")`;
+    console.log(user, pass, email);
+
+
+    var command = `INSERT INTO User (user_name, user_password, user_email, user_role) VALUES ( "${user}", "${pass}", "${email}", "user")`;
 
     db.query(command);
 
@@ -122,6 +127,81 @@ app.get("/verify-email", (req, res) => {
 
 }
 );
+
+app.post('/forgot-password', (req, res) => {
+    const { email } = req.body;
+
+    try {
+        db.query(`SELECT * from User WHERE user_email = "${email}";`, (err, result) => {
+            if (!result || !result[0] || !result[0].user_email) {
+                console.log("No email in DB")
+                return res.status(400).json({ message: 'Invalid email' });
+                
+            }
+            else {
+
+                console.log("Email Passed");
+
+                const token = generateToken(email);
+
+                const link = `http//localhost:8080/send-password?=${token}`
+
+                console.log("Sending mail...")
+
+                getMailPassword(email, link, (error) => {
+                    if (error) {
+                        res.status(500).send("Can't send email");
+                        console.log(error);
+                    } 
+        
+            
+                })
+
+                console.log("Email Sent.")
+                res.status(200).send("Email sent.")
+                return res.json(token);
+            }
+        }) 
+
+   } catch (err) {
+        console(err);
+   }
+
+    return
+})
+
+app.get('/send-password', (req, res) => {
+    if (!token) {
+        res.status(401).send("Invalid user token");
+        return;
+    }
+
+    let decodedToken;
+    try {
+        decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    } catch {
+        res.status(401).send("Invalid authentication credentials");
+        return;
+    }
+
+    if (
+        !decodedToken.hasOwnProperty("email") || !decodedToken.hasOwnProperty("expirationDate")
+    ) {
+        res.status(401).send("Invalid authenication credentials.");
+        return;
+    }
+
+    const expirationDate = new Date(decodedToken.expirationDate);
+
+    if (expirationDate < new Date()) {
+        res.status(401).send("Token has expired.");
+        return;
+    }
+    res.status(200).send("Verification Successful");
+    console.log("Verification successful");
+
+    return res.json("Verified")
+})
 
 //POST requests
 
@@ -303,7 +383,7 @@ app.get("/reservations", async (req, res) => {
 
     db.query(command, (err, results) => {
 
-        console.log(results);
+
 
         res.json(results)
 
@@ -381,6 +461,23 @@ app.get("/ticket", async (req, res) => {
 
 
 //UPDATE requests
+
+
+app.put("/users/password", async (req, res) => {
+    const password = req.body;
+    const email = req.body;
+
+    const command = `UPDATE User SET user_password = "${password}" WHERE user_email = ${email}`;
+
+    try {
+        db.query(command, (err, results) => {
+            console.log(results)
+        });
+    } catch (err) {
+        console.log(err);
+    }
+    return
+})
 
 
 //UPDATE User by user_id
@@ -507,24 +604,38 @@ app.delete("/users/delete/:info", async (req,res) => {
 
 
 //DELETE Reservation
-app.delete("/reservations/delete", async (req,res)  => {
+app.delete("/reservations/delete/:id", async (req,res) => {
 
-    const { id } = req.body
+    const { id } = req.params
+
+    console.log(`Obtained ${id}`);
+
+    command = `DELETE FROM Reservation WHERE reservation_id = ${id}`;
+
+    console.log(command);
 
     try {
-        db.query(`DELETE FROM Reservation WHERE reservation_id = "${id}";`, (err, result) => {
+        db.query(command, (err, result) => {
 
-            console.log(result)
-            console.log("deletion complete")
+
+            console.log(result);
+            console.log(`Reservation ${id} Deleted`)
+    
             
-
+            
+    
         });
 
-        return
 
-    } catch (err) {
-        res.status(500).send('Server error');
-    }; 
+        res.status(200).json({ message: 'Reservation deleted successfully' });
+
+    }   catch (err) {
+        console.log(err);
+    }
+
+    
+
+    
 
 });
 
