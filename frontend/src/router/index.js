@@ -77,7 +77,7 @@ router.beforeEach(async (to, from, next) => {
     const store = useLoggedInUserStore()
     if (!store.isLoggedIn) {
         // User is not logged in
-        if (to.name !== 'login' && to.name !== 'registration') {
+        if (to.name !== 'login' && to.name !== 'registration' && to.name !== 'forgot-password') {
           // User is trying to access a route other than login or registration
           next({ name: 'login' }); // Redirect to login page
         } else {
