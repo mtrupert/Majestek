@@ -50,5 +50,24 @@ exports.getMailPassword = (email, link) => {
     return
 }
 
+exports.confirmationEmail = (email, link, item, id, start, end) => {
+    let body = `Thank you for submitting your request. \n\n Here are are the details of the     reservation: \n\n Reservation: ${name} \n  Serial: ${id}  \n  Date of reservation: ${start} \n End of reservation: ${end} \n\n  Come down to the University of Houston Cullen College of Engineering Engineering Building 2, Room 103 at Martin Luther King Boulevard Houston TX 77204 to pick up your reserved equipment \n\n If you have any questions or need immediate assistance, please feel free to contact our IT support team at 713-743-0206 \n\n Thank you for choosing our services. We look forward to serving you.` ;
+
+    nodeoutlook.sendEmail({
+        auth: {
+            user: "kyleleevy1@outlook.com",
+            pass: "Ciboney1920!"
+        },
+        from: 'kyleleevy1@outlook.com',
+        to: email,
+        subject: 'IT Resevation Confirmation',
+        html: body,
+        text: 'this is the text version'
+    });
+
+    return
+}
+
+
 
 
