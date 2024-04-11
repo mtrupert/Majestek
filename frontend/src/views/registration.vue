@@ -1,51 +1,80 @@
 <template>
-    <div class="ac">
-      <form class="create-account-form" @submit.prevent="createAccount">
-        <h1>Create New Account</h1>
-        <div class="form-group">
-          <label for="email">Enter Email:</label>
-          <input type="email" id="email" v-model="account.email" required>
-        </div>
-        <div class="form-group">
-          <label for="username">Enter Username:</label>
-          <input type="text" id="username" v-model="account.username" required>
-        </div>
-        <div class="form-group">
-          <label for="password">Enter Password:</label>
-          <input type="password" id="password" v-model="account.password" required>
-        </div>
-        <div class="form-group">
-          <label>Are you a student or faculty member?</label>
-          <div class="radio-group">
-            <label><input type="radio" v-model="account.role" value="student" required> Student</label>
-            <label><input type="radio" v-model="account.role" value="faculty" required> Faculty</label>
-          </div>
-        </div>
-        <input type="submit" value="Create Account">
-      </form>
+  <div class="ac" v-if="isRegistered">
+    <h2 :style="{ color: 'red' }"><i> Registration email sent to </i></h2> <p><i>{{ account.email }}</i></p>
+    <div>
+    <br>
+    <RouterLink to="/login">
+      <input type="submit" value="Return to login page">
+    </RouterLink>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        account: {
-          email: '',
-          username: '',
-          password: '',
-          role: '' // This will hold the selected role (student or faculty)
-        }
-      };
-    },
-    methods: {
-      createAccount() {
-        // Implement your create account logic here
-        console.log("Create account with:", this.account);
+  </div>
+  <div class="ac" v-if="!isRegistered">
+    <form class="create-account-form" @submit.prevent="handleSubmit">
+      <h1>Create New Account</h1>
+      <div class="form-group">
+        <label for="email">Enter Email:</label>
+        <input type="email" id="email" v-model="account.email" required>
+      </div>
+      <div class="form-group">
+        <label for="username">Enter Username:</label>
+        <input type="text" id="username" v-model="account.username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Enter Password:</label>
+        <input type="password" id="password" v-model="account.password" required>
+      </div>
+      <input type="submit" value="Create Account">
+    </form>
+  </div>
+</template>
+
+<script>
+
+import { registerUser } from '@/services/API';
+import { RouterLink } from 'vue-router';
+
+
+
+export default {
+  data() {
+    return {
+      
+      isRegistered : false,
+
+      account: {
+        email: '',
+        username: '',
+        password: '',
       }
+        
+    };
+  },
+  methods: {
+    async handleSubmit() {
+    try {
+
+      this.isRegistered = true;
+
+      const { email, username, password } = this.account;
+      console.log(this.account);
+
+      const response = await registerUser(email, username, password);
+      
+
+      console.log('User registered successfully:', response);
+      // Optionally, you can redirect or show a success message
+
+      
+
+    } catch (error) {
+      console.error('Error registering user:', error.message);
+      // Optionally, show an error message to the user
     }
   }
-  </script>
+}
+}
+
+</script>
   
   <style>
   .ac {
