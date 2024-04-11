@@ -60,16 +60,13 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
-        width: 100vw;
-        background-color: black;
     }
 
     .form-container {
-        max-width: 100vw;
+        max-width: 60vw;
+        display: flex;
         padding: 20px;
         border-radius: 8px;
-        background-color: black;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
@@ -107,3 +104,4 @@ export default {
             background-color: #e60000; /* Darker red on hover */
         }
 </style>
+
