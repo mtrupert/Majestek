@@ -15,7 +15,7 @@ exports.generateToken = (email, user, pass) => {
 
 // Function to Send Registration Link
 exports.getMailOptions = (email, link) => {
-    let body = 'click link here: ' + link;
+    let body = 'click link here to continue registration: ' + link;
 
     nodeoutlook.sendEmail({
         auth: {
@@ -24,7 +24,7 @@ exports.getMailOptions = (email, link) => {
         },
         from: 'kyleleevy1@outlook.com',
         to: email,
-        subject: 'Testing...',
+        subject: 'UH IT Reservation Registration',
         html: body,
         text: 'this is the text version'
     });
@@ -37,10 +37,10 @@ exports.getMailPassword = (email, link) => {
 
     nodeoutlook.sendEmail({
         auth: {
-            user: "kyleleevy1@oulook.com",
+            user: "kyleleevy1@outlook.com",
             pass: "Ciboney1920!"
         },
-        from: "Ciboney1920!",
+        from: 'kyleleevy1@outlook.com',
         to: email,
         subject: 'Forgot Password',
         html: body,
@@ -49,4 +49,6 @@ exports.getMailPassword = (email, link) => {
 
     return
 }
+
+
 
