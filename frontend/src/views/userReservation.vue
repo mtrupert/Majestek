@@ -2,8 +2,9 @@
     <div class="reservations-container">
       <div v-for="reservation in reservations" :key="reservation.id" class="reservation-card">
         <div class="reservation-icon">
-          <i :class="reservation.icon"></i>
-        </div>
+        <img src = "../assets/computer_icon.png" v-if="reservation.type === 'Laptop'" alt="Laptop">
+        <img src = "../assets/locker_icon.png" v-else-if="reservation.type === 'Locker'" alt="Locker">
+      </div>
         <div class="reservation-details">
           <!-- Laptop Reservation Details -->
           <div v-if="reservation.type === 'Laptop'" class="details">
@@ -67,28 +68,26 @@
 <style>
 .reservations-container {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  margin-right: 25px;
+  justify-content: flex;
   gap: 20px;
   padding: 20px;
+  width: 100%; /* Ensure the container takes full width */
 }
 
 .reservation-card {
-  width: 300px;
+  width: 300px; /* Fixed width */
   border: 1px solid #ccc;
   border-radius: 5px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px; /* Add some space at the bottom */
 }
 
 .reservation-icon {
   text-align: center;
   padding: 20px;
   background-color: #f5f5f5;
-}
-
-.reservation-icon i {
-  font-size: 24px;
 }
 
 .reservation-details {
@@ -102,5 +101,13 @@
 .detail strong {
   margin-right: 5px;
 }
+.reservation-icon img {
+  width: 200px; /* Keep your icon size */
+  height: auto; /* Maintain aspect ratio */
+  display: block; /* Ensure icons are centered */
+  margin: 0 auto; /* Center the icon */
+}
+
 </style>
+
   
