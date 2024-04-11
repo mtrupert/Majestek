@@ -464,10 +464,12 @@ app.get("/ticket", async (req, res) => {
 
 
 app.put("/users/password", async (req, res) => {
-    const password = req.body;
-    const email = req.body;
+    const password = req.body.password;
+    const email = req.body.email;
 
-    const command = `UPDATE User SET user_password = "${password}" WHERE user_email = ${email}`;
+    console.log(email, password);
+    const command = `UPDATE User SET user_password = "${password}" WHERE user_email = "${email}";`;
+    console.log(command);
 
     try {
         db.query(command, (err, results) => {
@@ -476,8 +478,8 @@ app.put("/users/password", async (req, res) => {
     } catch (err) {
         console.log(err);
     }
-    return
-})
+    return res.status(200).send("Password Changed Successfully")
+});
 
 
 //UPDATE User by user_id
