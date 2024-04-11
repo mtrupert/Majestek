@@ -1,6 +1,6 @@
 <template>
   <div class="ac" v-if="isRegistered">
-    <h2 :style="{ color: 'red' }"><i> Registration email sent to </i></h2> <p><i>{{ account.email }}</i></p>
+    <h2 :style="{ color: 'red' }"><i> Registration email sent to {{ account.email }}</i></h2>
     <div>
     <br>
     <RouterLink to="/login">
