@@ -72,17 +72,24 @@ const router = createRouter({
 )
 
 
-router.beforeEach(async (to, from) => {
+
+router.beforeEach(async (to, from, next) => {
     const store = useLoggedInUserStore()
-    if (
-      !store.isLoggedIn &&
-      // ❗️ Avoid an infinite redirect
-      to.name !== 'login'
-    ) {
-      // redirect the user to the login page
-      return { name: 'login' }
-    }
+    if (!store.isLoggedIn) {
+        // User is not logged in
+        if (to.name !== 'login' && to.name !== 'registration') {
+          // User is trying to access a route other than login or registration
+          next({ name: 'login' }); // Redirect to login page
+        } else {
+          // Allow access to login or registration page
+          next(); // Continue navigation
+        }
+      } else {
+        // User is logged in
+        next(); // Continue navigation
+      }
   })
+
 
 
 export default router
