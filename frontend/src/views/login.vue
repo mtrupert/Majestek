@@ -25,6 +25,9 @@ import { useLoggedInUserStore } from "../store/loggedInUsers";
 
 
 export default {
+mounted() {
+  this.store.isLoggedIn = false
+},
 setup() {
   const store = useLoggedInUserStore();
   return {
