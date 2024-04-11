@@ -6,7 +6,9 @@
     </div>
     <!-- Vertical Navigation Section -->
     <div class="vertical-nav" v-if="store.isLoggedIn">
-      <img src="./assets/UHLOGO.jpg" alt="Logo" class="logo">
+      <RouterLink to="/" class="logo-link">
+        <img src="./assets/UHLOGO.jpg" alt="Logo" class="logo">
+      </RouterLink>
       <li class="routing-links">
         <RouterLink to="/viewinventory" tag="button" v-if='store.role=="admin"'>View Inventory</RouterLink>
         <RouterLink to="/viewtickets" tag="button" v-if='store.role=="admin"'>View Tickets</RouterLink>
