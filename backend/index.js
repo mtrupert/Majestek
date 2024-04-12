@@ -372,6 +372,47 @@ app.post("/ticket/post/:info", async (req, res) => {
 
 // select or GET requests
 
+// GET all available Laptops
+app.get('/equipment/laptops', async (req, res) => {
+
+    command1 = "SELECT Equipment.equipment_id, Equipment.serial_number, " 
+    command2 = "Equipment_Type.type, Equipment.equipment_name "
+    command3 = "FROM Equipment "
+    command4 = "JOIN Equipment_Type ON Equipment.equipment_type_id = Equipment_Type.equipment_type_id "
+    command5 = "LEFT JOIN Reservation ON Reservation.equipment_id = Equipment.equipment_id "
+    command6 = "WHERE Reservation.reservation_id IS NULL "
+    command7 = ' AND Equipment_Type.type = "Laptop";'
+
+    command = command1 + command2 + command3 + command4 + command5 + command6 + command7
+
+    db.query(command, (err, results) =>{
+        console.log(results)
+        return res.json(results);
+    })
+    
+});
+
+// GET all available Accesories
+app.get('/equipment/accessories', async (req, res) => {
+
+    command1 = "SELECT Equipment.equipment_id, Equipment.serial_number, " 
+    command2 = "Equipment_Type.type, Equipment.equipment_name "
+    command3 = "FROM Equipment "
+    command4 = "JOIN Equipment_Type ON Equipment.equipment_type_id = Equipment_Type.equipment_type_id "
+    command5 = "LEFT JOIN Reservation ON Reservation.equipment_id = Equipment.equipment_id "
+    command6 = "WHERE Reservation.reservation_id IS NULL "
+    command7 = ' AND Equipment_Type.type = "Accessories";'
+
+    command = command1 + command2 + command3 + command4 + command5 + command6 + command7
+
+    db.query(command, (err, results) =>{
+        console.log(results)
+        return res.json(results);
+    })
+    
+});
+
+
 //GET Reservations
 app.get("/reservations", async (req, res) => {
 
