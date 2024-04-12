@@ -12,6 +12,7 @@
       <li class="routing-links">
         <RouterLink to="/viewinventory" tag="button" v-if='store.role=="admin"'>View Inventory</RouterLink>
         <RouterLink to="/viewtickets" tag="button" v-if='store.role=="admin"'>View Tickets</RouterLink>
+        <RouterLink to="/adminregistration" tag="button" v-if='store.role=="admin"'>Create Admin</RouterLink>
         <RouterLink to="/maketicket" tag="button">Send Support Ticket</RouterLink>
         <button @click="store.logout()">Logout</button>
       </li>

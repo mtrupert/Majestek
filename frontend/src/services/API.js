@@ -237,6 +237,25 @@ console.log(error.response.data.message)
 }
 };
 
+export async function registerAdmin(email, username, password) {
+  try {
+    const response = await axiosInstance.post('/register-admin', {
+      email: email,
+      user: username,
+      pass: password
+    });
+  
+    console.log(response)
+    console.log("Email sent")
+    
+    this.$router.push("/");
+    return { message: "Check email for Verification" }
+    
+  } catch (error) {
+  console.log(error.response.data.message)
+  }
+  };
+
 export async function getAllTickets() {
 try {
   const response = await axiosInstance.get('/ticket');
