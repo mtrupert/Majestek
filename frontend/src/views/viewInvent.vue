@@ -8,14 +8,13 @@
     <table v-if="showLockerTable" class="inventory-table">
       <thead>
         <tr>
-          <th>Locker ID</th>
-          <th>Serial Number</th>
-          <th>Availability</th>
-          <th>Room ID</th>
+          <th> Locker ID</th>
+          <th> Serial Number</th>
+          <th @click="sortBy('avail_status')">Availability</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in lockerInventory" :key="index">
+        <tr v-for="(item, index) in sortedLockerInventory" :key="index">
           <td>{{ item.locker_id }}</td>
           <td>{{ item.serial_num }}</td>
           <td>{{ item.avail_status }}</td>
@@ -26,18 +25,18 @@
     <table v-if="showEquipmentTable" class="inventory-table">
       <thead>
         <tr>
-          <th>Equipment ID</th>
-          <th>Serial Number</th>
-          <th>Equipment Type</th>
-          <th>Equipment Name</th>
-          <th>Availability</th>
+          <th> Equipment ID</th>
+          <th> Serial Number</th>
+          <th @click="sortBy('equipment_type_id')">Equipment Type</th>
+          <th> Equipment Name</th>
+          <th @click="sortBy('equipment_status_id')">Availability</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in equipmentInventory" :key="index">
+        <tr v-for="(item, index) in sortedEquipmentInventory" :key="index">
           <td>{{ item.equipment_id }}</td>
           <td>{{ item.serial_number }}</td>
-          <td>{{ getEquipmentType(item.equipment_type_id) }}</td> <!-- Updated this line -->
+          <td>{{ getEquipmentType(item.equipment_type_id) }}</td>
           <td>{{ item.equipment_name }}</td>
           <td>{{ item.equipment_status_id === 1 ? 'Available' : 'Unavailable' }}</td>
         </tr>
@@ -55,7 +54,9 @@ export default {
       lockerInventory: [],
       equipmentInventory: [],
       showLockerTable: false,
-      showEquipmentTable: false
+      showEquipmentTable: false,
+      sortKey: '',
+      sortOrders: {}
     }
   },
   methods: {
@@ -84,6 +85,26 @@ export default {
     },
     getEquipmentType(typeId) {
       return typeId === 1 ? 'Laptop' : typeId === 2 ? 'Accessory' : 'Unknown'; // Update the rendering based on the type ID
+    },
+    sortBy(key) {
+      this.sortKey = key;
+      this.sortOrders[key] = !this.sortOrders[key];
+    }
+  },
+  computed: {
+    sortedLockerInventory() {
+      const key = this.sortKey;
+      const order = this.sortOrders[key] ? 1 : -1;
+      return this.lockerInventory.slice().sort((a, b) => {
+        return order * (a[key] > b[key] ? 1 : -1);
+      });
+    },
+    sortedEquipmentInventory() {
+      const key = this.sortKey;
+      const order = this.sortOrders[key] ? 1 : -1;
+      return this.equipmentInventory.slice().sort((a, b) => {
+        return order * (a[key] > b[key] ? 1 : -1);
+      });
     }
   }
 }
