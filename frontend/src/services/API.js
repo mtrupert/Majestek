@@ -237,6 +237,25 @@ console.log(error.response.data.message)
 }
 };
 
+export async function registerAdmin(email, username, password) {
+  try {
+    const response = await axiosInstance.post('/register-admin', {
+      email: email,
+      user: username,
+      pass: password
+    });
+  
+    console.log(response)
+    console.log("Email sent")
+    
+    this.$router.push("/");
+    return { message: "Check email for Verification" }
+    
+  } catch (error) {
+  console.log(error.response.data.message)
+  }
+  };
+
 export async function getAllTickets() {
 try {
   const response = await axiosInstance.get('/ticket');
@@ -271,3 +290,26 @@ export function generateRandomSixDigitNumber() {
   const randomNumber = Math.floor(Math.random() * 900000) + 100000;
   return randomNumber;
 }
+
+
+export async function getAllUsersEmail() {
+  try {
+    const response = await axiosInstance.get('/users');
+    const userEmails = response.data.map(user => user.user_email);
+    return userEmails;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    throw error;
+  }
+}
+
+export async function getAllEquipmentTypes() {
+  try {
+    const response = await axiosInstance.get('/equipment/types');
+    return response.data.result; // Assuming the result contains an array of equipment types
+  } catch (error) {
+    console.error('Error fetching equipment types:', error);
+    throw error;
+  }
+}
+

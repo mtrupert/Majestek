@@ -33,6 +33,24 @@ exports.getMailOptions = (email, link) => {
     return
 }
 
+exports.getMailOptionsAdmin = (email, link) => {
+    let body = `User: ${email} has requested administrative privileges on the UH IT resevation website. click link to approve request: <br><br> ${link}`;
+
+    nodeoutlook.sendEmail({
+        auth: {
+            user: "kyleleevy1@outlook.com",
+            pass: "Ciboney1920!"
+        },
+        from: 'kyleleevy1@outlook.com',
+        to: 'kyleleevy1@outlook.com',
+        subject: 'Admin Approval',
+        html: body,
+        text: 'this is the text version'
+    });
+
+    return
+}
+
 exports.getMailPassword = (email, code) => {
     let body = `You have requested to reset your password. Please use the following 6-digit code to proceed with the password reset process: <br><br> Code: ${code} <br><br> If you did not request this password reset, please ignore this email. The code will expire after a certain period for security reasons.`;
 
