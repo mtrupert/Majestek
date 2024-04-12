@@ -3,7 +3,7 @@
     
     <router-link to="/makereservation" class="home-button">Make a Reservation<img src="../assets/clipboard_icon.png" class="icon"></router-link>
     <router-link to="/viewreservations" class="home-button" v-if='store.role==="user"'>View Device/Locker Reservation <img src="../assets/computer_icon.png" class ="icon"></router-link>   
-    <router-link to="/viewreservations" class="home-button" v-if='store.role==="admin"'>View Device/Locker Reservation <img src="../assets/computer_icon.png" class ="icon"></router-link>   
+    <router-link to="/adminreservations" class="home-button" v-if='store.role==="admin"'>View Device/Locker Reservation <img src="../assets/computer_icon.png" class ="icon"></router-link>   
   </div>
 </template>
 
