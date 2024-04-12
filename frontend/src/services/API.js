@@ -77,6 +77,28 @@ export async function getReservationByUser(userId) {
   }
 }
 
+export async function getAvailableLaptops() {
+  try {
+    const response = await axiosInstance.get('/equipment/laptops');
+    console.log(response.data)
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching laptops:', error);
+    throw error;
+  }
+}
+
+export async function getAvailableAccessories() {
+  try {
+    const response = await axiosInstance.get('/equipment/accessories');
+    console.log(response.data)
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching accessories:', error);
+    throw error;
+  }
+}
+
 export async function getAllLockers() {
   try {
     const response = await axiosInstance.get('/lockers');
