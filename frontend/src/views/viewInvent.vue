@@ -8,9 +8,10 @@
     <table v-if="showLockerTable" class="inventory-table">
       <thead>
         <tr>
-          <th> Locker ID</th>
-          <th> Serial Number</th>
+          <th>Locker ID</th>
+          <th>Serial Number</th>
           <th @click="sortBy('avail_status')">Availability</th>
+          <th>Actions</th> <!-- Added Actions column -->
         </tr>
       </thead>
       <tbody>
@@ -18,18 +19,22 @@
           <td>{{ item.locker_id }}</td>
           <td>{{ item.serial_num }}</td>
           <td>{{ item.avail_status }}</td>
-          <td>{{ item.room_id }}</td>
+          <td>
+            <button style="color: red;" @click="modifyLocker(item)">Modify</button> <!-- Red Modify button -->
+            <button style="color: red;" @click="deleteLocker(item)">Delete</button> <!-- Red Delete button -->
+          </td>
         </tr>
       </tbody>
     </table>
     <table v-if="showEquipmentTable" class="inventory-table">
       <thead>
         <tr>
-          <th> Equipment ID</th>
-          <th> Serial Number</th>
+          <th>Equipment ID</th>
+          <th>Serial Number</th>
           <th @click="sortBy('equipment_type_id')">Equipment Type</th>
-          <th> Equipment Name</th>
+          <th>Equipment Name</th>
           <th @click="sortBy('equipment_status_id')">Availability</th>
+          <th>Actions</th> <!-- Added Actions column -->
         </tr>
       </thead>
       <tbody>
@@ -39,6 +44,10 @@
           <td>{{ getEquipmentType(item.equipment_type_id) }}</td>
           <td>{{ item.equipment_name }}</td>
           <td>{{ item.equipment_status_id === 1 ? 'Available' : 'Unavailable' }}</td>
+          <td>
+            <button style="color: red;" @click="modifyEquipment(item)">Modify</button> <!-- Red Modify button -->
+            <button style="color: red;" @click="deleteEquipment(item)">Delete</button> <!-- Red Delete button -->
+          </td>
         </tr>
       </tbody>
     </table>
@@ -89,6 +98,22 @@ export default {
     sortBy(key) {
       this.sortKey = key;
       this.sortOrders[key] = !this.sortOrders[key];
+    },
+    modifyLocker(locker) {
+      // Implement logic to modify locker
+      console.log('Modify locker:', locker);
+    },
+    deleteLocker(locker) {
+      // Implement logic to delete locker
+      console.log('Delete locker:', locker);
+    },
+    modifyEquipment(equipment) {
+      // Implement logic to modify equipment
+      console.log('Modify equipment:', equipment);
+    },
+    deleteEquipment(equipment) {
+      // Implement logic to delete equipment
+      console.log('Delete equipment:', equipment);
     }
   },
   computed: {
@@ -109,3 +134,7 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+/* Add your CSS styles here */
+</style>

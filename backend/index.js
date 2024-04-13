@@ -568,7 +568,7 @@ app.get("/reservations", async (req, res) => {
     command3 = "JOIN User ON User.user_id = Reservation.user_id "
     command4 = "JOIN Equipment_Type ON Equipment_Type.equipment_type_id = Equipment.equipment_type_id;"
 
-    command = command1 + command2 + command3;
+    command = command1 + command2 + command3 + command4;
 
     db.query(command, (err, results) => {
 
