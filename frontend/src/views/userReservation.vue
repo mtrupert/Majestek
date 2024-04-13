@@ -4,10 +4,11 @@
         <div class="reservation-icon">
         <img src = "../assets/computer_icon.png" v-if="reservation.type === 'Laptop'" alt="Laptop">
         <img src = "../assets/locker_icon.png" v-else-if="reservation.type === 'Locker'" alt="Locker">
+        <img src = "../assets/accessory_icon.png" v-else-if="reservation.type === 'Accessories'" alt="Accessories">
       </div>
         <div class="reservation-details">
-          <!-- Laptop Reservation Details -->
-          <div v-if="reservation.type === 'Laptop'" class="details">
+          <!-- Laptop & Accessories Reservation Details -->
+          <div v-if="reservation.type === 'Laptop' || reservation.type === 'Accessories'" class="details">
             <div class="detail"><strong>Device Name:</strong> {{ reservation.deviceName }}</div>
             <div class="detail"><strong>Serial Number:</strong> {{ reservation.serialNumber }}</div>
             <div class="detail"><strong>Reservation Duration:</strong> {{ reservation.duration }}</div>
@@ -46,7 +47,6 @@
           {
             id: 1,
             type: 'Laptop',
-            icon: 'fas fa-laptop',
             deviceName: 'Dell 328',
             serialNumber: '123-456-789',
             duration: 'April 1 - April 10',
@@ -54,9 +54,15 @@
           {
             id: 2,
             type: 'Locker',
-            icon: 'fas fa-lock',
             lockerNumber: 'Locker 23',
             room: 'Room 101',
+            duration: 'April 2 - April 12',
+          },
+          {
+            id: 3,
+            type: 'Accessories',
+            deviceName: 'Mouse',
+            serialNumber: '123-495-694',
             duration: 'April 2 - April 12',
           },
           // Add more reservations as needed
