@@ -57,6 +57,20 @@ export async function reserveLocker(user, locker) {
   }
 }
 
+export async function reserveEquipment(user, equipment) {
+  try {
+    console.log(user, equipment);
+    const response = await axiosInstance.post(`/reservation/equipment/post`, {
+      user: user,
+      equipment: equipment
+    });
+    return response;
+  } catch (error) {
+    console.error('Error reserving locker:', error);
+    throw error;
+  }
+}
+
 export async function createUser(userData) {
   try {
     const response = await axiosInstance.post('/users/post', userData);
