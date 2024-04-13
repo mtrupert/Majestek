@@ -447,6 +447,28 @@ app.get("/reservation-user/:user_id", async (req, res) => {
     });
 });
 
+//GET Reservation by User
+app.get('/reservation/user/:id', async (req, res) => {
+
+    const id = req.params.id
+    
+
+    const command1 = "SELECT user_id,Reservation.reservation_id, Equipment.equipment_name " 
+    const command2 = "FROM Reservation "
+    const command3 = "JOIN Equipment ON Reservation.equipment_id = Equipment.equipment_id "
+    const command4 = `WHERE user_id = ${id};`
+
+    const command = command1 + command2 + command3 + command4
+
+    db.query(command, (err, result) => {
+
+        console.log(result)
+
+        res.send(result)
+
+    });
+});
+
 
 //GET Lockers
 app.get("/lockers", async (req, res) => {
