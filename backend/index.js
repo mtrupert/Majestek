@@ -236,10 +236,42 @@ app.post('/reservation/locker/post', async (req, res) => {
     const startDate = formatDate(new Date);
 
     
-    var deadline = new Date(2024, 4, 6)
+    const deadline = formatDate(new Date(2024, 4, 6))
 
     
     const command = `INSERT INTO Reservation (reserv_start, reserv_end, reserv_status, locker_id, user_id) VALUES ('${startDate}', '${deadline}', "RESERVED", ${locker}, ${user})`
+ 
+
+    db.query(command, (err, results)=>{
+
+        if (err) {
+            console.log(err);
+        }
+
+        console.log(results)
+    }) 
+
+    console.log("Reservation Created")
+    return res.send('Reservation Created')
+});
+
+
+// Reserve Equipment
+app.post('/reservation/equipment/post', async (req, res) => {
+
+    
+
+    const { user, equipment } = req.body
+
+    console.log(user, equipment);
+
+    const startDate = formatDate(new Date);
+
+    
+    const deadline = formatDate(new Date(2024, 4, 6))
+
+    
+    const command = `INSERT INTO Reservation (reserv_start, reserv_end, reserv_status, equipment_id, user_id) VALUES ('${startDate}', '${deadline}', "RESERVED", ${equipment}, ${user})`
  
 
     db.query(command, (err, results)=>{
