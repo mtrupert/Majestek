@@ -563,9 +563,10 @@ app.get('/reserved/lockers/:id', async (req, res) => {
 //GET Reservations
 app.get("/reservations", async (req, res) => {
 
-    command1 = "SELECT reservation_id, reserv_start, user_name, user_email, equipment_type from Reservation "
-    command2 = "JOIN Equipment ON Equipment.equipment_id = Reservation.equipment_id "
-    command3 = "JOIN User ON User.user_id = Reservation.user_id;"
+    command1 = "SELECT reservation_id, reserv_start, user_name, user_email, type from Reservation "
+    command2 = "JOIN Equipment ON Equipment.equipment_id = Reservation.equipment_id  "
+    command3 = "JOIN User ON User.user_id = Reservation.user_id "
+    command4 = "JOIN Equipment_Type ON Equipment_Type.equipment_type_id = Equipment.equipment_type_id;"
 
     command = command1 + command2 + command3;
 
