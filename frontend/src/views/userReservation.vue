@@ -7,7 +7,7 @@
         <img src = "../assets/accessory_icon.png" v-else-if="reservation.type === 'Accessories'" alt="Accessories"> -->
       </div>
         <div class="reservation-details">
-          <!-- Laptop & Accessories Reservation Details -->
+          <!-- Laptop Reservation Details -->
           <div  class="details">
             <div class="detail"><strong>Device Name:</strong> {{ laptop.equipment_name }}</div>
             <div class="detail"><strong>Serial Number:</strong> {{ laptop.serial_number }}</div>
@@ -21,7 +21,7 @@
     <div class="reservations-container" v-if="accessories">
       <div v-for="accessory in accessories" class="reservation-card">
         <div class="reservation-icon">
-        <img src = "../assets/accessory_icon.png" alt="Laptop">
+        <img src = "../assets/accessory_icon.png" alt="accessory">
         <!-- <img src = "../assets/locker_icon.png" v-else-if="reservation.type === 'Locker'" alt="Locker">
         <img src = "../assets/accessory_icon.png" v-else-if="reservation.type === 'Accessories'" alt="Accessories"> -->
       </div>
@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-    <!-- Accessories -->
+    <!-- Lockers -->
     <div class="reservations-container" v-if="lockers">
       <div v-for="locker in lockers" class="reservation-card">
         <div class="reservation-icon">
@@ -45,7 +45,7 @@
         <img src = "../assets/accessory_icon.png" v-else-if="reservation.type === 'Accessories'" alt="Accessories"> -->
       </div>
         <div class="reservation-details">
-          <!-- Accessories Reservation Details -->
+          <!-- Locker Reservation Details -->
           <div  class="details">
             <div class="detail"><strong>Locker:</strong> {{ locker.serial_num }}</div>
             <div class="detail"><strong>Location:</strong> {{ locker.room_desc }}</div>
