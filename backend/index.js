@@ -372,6 +372,28 @@ app.post("/ticket/post/:info", async (req, res) => {
 
 // select or GET requests
 
+//GET Available Lockers
+app.get("/equipment/lockers", async (req, res) => {
+
+    const command1 = "SELECT Locker.locker_id, Locker.serial_num, Reservation.reservation_id "
+    const command2 = "FROM Locker "
+    const command3 = "LEFT JOIN Reservation ON Reservation.locker_id = Locker.locker_id "
+    const command4 = 'WHERE Locker.avail_status = "available" '
+    const command5 = "AND Reservation.reservation_id IS NULL;"
+
+    const command = command1 + command2 + command3 + command4 + command5
+
+    db.query(command, (err, result) => {
+
+        console.log(result)
+
+        res.send(result)
+
+    }
+    );
+}
+);
+
 // GET all available Laptops
 app.get('/equipment/laptops', async (req, res) => {
 
