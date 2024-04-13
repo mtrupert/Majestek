@@ -61,7 +61,7 @@
   <script>
 
   import { useLoggedInUserStore } from '@/store/loggedInUsers';
-  import { getLaptopReservationByID, getAccessoriesReservationByID, getLockerReservationByID, formatDate } from '@/services/API';
+  import { getLaptopReservationByID, getAccessoriesReservationByID, getLockerReservationByID } from '@/services/API';
   import { ref } from 'vue';
 
   export default {
