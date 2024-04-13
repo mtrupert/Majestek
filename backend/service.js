@@ -89,6 +89,20 @@ exports.confirmationEmail = (email, link, item, id, start, end) => {
 
 
 
-
+// Function to formate date
+exports.formatDate = (currentDate) => {
+    
+  
+    // Extract year, month, and day from the currentDate object
+    const year = currentDate.getFullYear(); // Get the current year (4 digits)
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Get the current month (zero-indexed, hence the +1), and pad with '0' if necessary
+    const day = String(currentDate.getDate()).padStart(2, '0'); // Get the current day of the month and pad with '0' if necessary
+  
+    // Construct the date string in YYYY-MM-DD format
+    const formattedDate = `${year}-${month}-${day}`;
+    console.log(formattedDate);
+  
+    return formattedDate;
+};
 
 

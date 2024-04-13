@@ -224,6 +224,37 @@ app.post("/lockers/post/:id", async (req, res) => {
     res.send('Information Inserted')
 });
 
+// Reserve Locker
+app.post('/reservation/locker/post', async (req, res) => {
+
+    
+
+    const { user, locker } = req.body
+
+    console.log(user, locker);
+
+    const startDate = formatDate(new Date);
+
+    
+    var deadline = new Date(2024, 4, 6)
+
+    
+    const command = `INSERT INTO Reservation (reserv_start, reserv_end, reserv_status, locker_id, user_id) VALUES ('${startDate}', '${deadline}', "RESERVED", ${locker}, ${user})`
+ 
+
+    db.query(command, (err, results)=>{
+
+        if (err) {
+            console.log(err);
+        }
+
+        console.log(results)
+    }) 
+
+    console.log("Reservation Created")
+    return res.send('Reservation Created')
+});
+
 //POST Equipment
 app.post("/equipment/post/:info", async (req, res) => {
 
