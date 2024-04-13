@@ -4,7 +4,7 @@ const mysql = require('mysql');
 const { createConnection } = require('net');
 const cors = require ('cors')
 const jwt = require('jsonwebtoken')
-const { generateToken, getMailOptions, getMailPassword } = require('./service');
+const { generateToken, getMailOptions, getMailPassword, formatDate } = require('./service');
 const { exit } = require('process');
 
 require("dotenv").config();
