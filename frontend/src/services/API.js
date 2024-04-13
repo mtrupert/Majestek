@@ -99,6 +99,17 @@ export async function getAvailableAccessories() {
   }
 }
 
+export async function getDeviceReservationByUser(id) {
+  try {
+    const response = await axiosInstance.get(`/reservation/user/${id}`);
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching reservations for user ${userId}:`, error);
+    throw error;
+  }
+}
+
 export async function getAllLockers() {
   try {
     const response = await axiosInstance.get('/lockers');
