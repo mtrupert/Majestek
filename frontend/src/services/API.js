@@ -105,6 +105,40 @@ export async function getReservationByUser(userId) {
   }
 }
 
+
+export async function getLaptopReservationByID(id) {
+  try {
+    const response = await axiosInstance.get(`/reserved/laptops/${id}`);
+    console.log(response.data)
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching laptops:', error);
+    throw error;
+  }
+}
+
+export async function getAccessoriesReservationByID(id) {
+  try {
+    const response = await axiosInstance.get(`/reserved/accessories/${id}`);
+    console.log(response.data)
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching laptops:', error);
+    throw error;
+  }
+}
+
+export async function getLockerReservationByID(id) {
+  try {
+    const response = await axiosInstance.get(`/reserved/lockers/${id}`);
+    console.log(response.data)
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching laptops:', error);
+    throw error;
+  }
+}
+
 export async function getAvailableLaptops() {
   try {
     const response = await axiosInstance.get('/equipment/laptops');
