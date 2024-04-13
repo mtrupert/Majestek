@@ -6,7 +6,7 @@
             <label for="device">Select Device</label>
             <select id="device" v-model="selectedDevice">
                 <option value="">- Please Select -</option>
-                <option v-for="device in devices" :key="device.id" :value="device.id">{{ device.name }}</option>
+                <option v-for="device in devices" :value="device.equipment_id">{{ device.equipment_name }}</option>
             </select>
         </div>
         <!-- Describe Device Issue Text Area -->
@@ -20,12 +20,43 @@
 </template>
 
 <script>
+
+import { useLoggedInUserStore } from '@/store/loggedInUsers'
+import { getDeviceReservationByUser } from '@/services/API'
+import { onMounted, ref } from 'vue';
+
 export default {
+
+    setup() {
+      const store = useLoggedInUserStore();
+      const devices = ref(null);
+      const id = store.id;
+
+      onMounted( async () => {
+        const id = store.id
+        console.log(id);
+
+        await getDeviceReservationByUser(id).then(response => {
+            devices.value = response
+            console.log(devices.value);
+        })
+
+        
+      })
+
+      return {
+        store,
+        username: store.currentUser,
+        role: store.currentRole,
+        id,
+        devices
+      }
+    },
     data() {
         return {
             selectedDevice: '',
             issueDescription: '',
-            devices: [] //Device data goes here
+            device: [] //Device data goes here
         };
     },
     methods: {
@@ -39,6 +70,9 @@ export default {
                 alert('Please describe the issue.');
                 return;
             }
+
+            //Logic for Post
+            
         }
     }
 
