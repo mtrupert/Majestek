@@ -7,13 +7,25 @@
             <option disabled value="">Please choose one</option>
             <option value="locker">Locker</option>
             <option value="laptop">Laptop</option>
+            <option value ="accessory">Accessories</option>
           </select>
         </div>
         <div class="column">
           <label for="deviceList">Device List:</label>
           <select id="deviceList" v-model="selectedDevice">
             <option disabled value="">Select a device</option>
-            <option v-for="device in devices" :key="device" :value="device">{{ device }}</option>
+            <option 
+            v-if="selectedType === 'laptop'" 
+            v-for="device in devices" :key="device" :value="device">{{ device }}
+            </option>
+            <option 
+            v-if="selectedType === 'locker'" 
+            v-for="device in devices" :key="device" :value="device">{{ device }}
+            </option>
+            <option 
+            v-if="selectedType === 'accessory'" 
+            v-for="device in devices" :key="device" :value="device">{{ device }}
+            </option>
           </select>
         </div>
         <button type="submit">Submit</button>
@@ -22,23 +34,29 @@
   </template>
   
   <script>
+  import { getAvailableLaptops } from '@/services/API';
   export default {
-    data() {
-      return {
-        selectedType: '',
-        selectedDevice: '',
-        devices: [],
-        deviceOptions: {
-          locker: ["Locker A", "Locker B", "Locker C"],
-          laptop: ["Laptop X", "Laptop Y", "Laptop Z"]
+  mounted(){},
+  data() {
+    return {
+      selectedType: '',
+      selectedDevice: '',
+      devices: [],
+    };
+  },
+  methods: {
+    async updateDeviceList() {
+      if (this.selectedType) {
+        try {
+          const response = await getAvailableLaptops();
+          this.devices = response.data;
+          this.selectedDevice = ''; // Reset selected device when type changes
+        } catch (error) {
+          console.error("Failed to fetch devices:", error);
+          this.devices = [];
         }
-      };
+      }
     },
-    methods: {
-      updateDeviceList() {
-        this.devices = this.deviceOptions[this.selectedType] || [];
-        this.selectedDevice = ''; // Reset selected device when type changes
-      },
       submitForm() {
         console.log(`Selected Type: ${this.selectedType}, Selected Device: ${this.selectedDevice}`);
         // Implement form submission logic here
