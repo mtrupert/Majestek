@@ -1,24 +1,56 @@
 <template>
-    <div class="reservations-container">
-      <div v-for="reservation in reservations" :key="reservation.id" class="reservation-card">
+    <div class="reservations-container" v-if="laptops">
+      <div v-for="laptop in laptops" class="reservation-card">
         <div class="reservation-icon">
-        <img src = "../assets/computer_icon.png" v-if="reservation.type === 'Laptop'" alt="Laptop">
-        <img src = "../assets/locker_icon.png" v-else-if="reservation.type === 'Locker'" alt="Locker">
-        <img src = "../assets/accessory_icon.png" v-else-if="reservation.type === 'Accessories'" alt="Accessories">
+        <img src = "../assets/computer_icon.png" alt="Laptop">
+        <!-- <img src = "../assets/locker_icon.png" v-else-if="reservation.type === 'Locker'" alt="Locker">
+        <img src = "../assets/accessory_icon.png" v-else-if="reservation.type === 'Accessories'" alt="Accessories"> -->
       </div>
         <div class="reservation-details">
           <!-- Laptop & Accessories Reservation Details -->
-          <div v-if="reservation.type === 'Laptop' || reservation.type === 'Accessories'" class="details">
-            <div class="detail"><strong>Device Name:</strong> {{ reservation.deviceName }}</div>
-            <div class="detail"><strong>Serial Number:</strong> {{ reservation.serialNumber }}</div>
-            <div class="detail"><strong>Reservation Duration:</strong> {{ reservation.duration }}</div>
+          <div  class="details">
+            <div class="detail"><strong>Device Name:</strong> {{ laptop.equipment_name }}</div>
+            <div class="detail"><strong>Serial Number:</strong> {{ laptop.serial_number }}</div>
+            <div class="detail"><strong>Reservation:</strong> {{ formatDate(laptop.reserv_start) }}</div>
+            <div class="detail"><strong>Due:</strong> {{ formatDate(laptop.reserv_end) }}</div>
           </div>
-          
-          <!-- Locker Reservation Details -->
-          <div v-else class="details">
-            <div class="detail"><strong>Locker Number:</strong> {{ reservation.lockerNumber }}</div>
-            <div class="detail"><strong>Room:</strong> {{ reservation.room }}</div>
-            <div class="detail"><strong>Reservation Duration:</strong> {{ reservation.duration }}</div>
+        </div>
+      </div>
+    </div>
+    <!-- Accessories -->
+    <div class="reservations-container" v-if="accessories">
+      <div v-for="accessory in accessories" class="reservation-card">
+        <div class="reservation-icon">
+        <img src = "../assets/accessory_icon.png" alt="Laptop">
+        <!-- <img src = "../assets/locker_icon.png" v-else-if="reservation.type === 'Locker'" alt="Locker">
+        <img src = "../assets/accessory_icon.png" v-else-if="reservation.type === 'Accessories'" alt="Accessories"> -->
+      </div>
+        <div class="reservation-details">
+          <!-- Accessories Reservation Details -->
+          <div  class="details">
+            <div class="detail"><strong>Device Name:</strong> {{ accessory.equipment_name }}</div>
+            <div class="detail"><strong>Serial Number:</strong> {{ accessory.serial_number }}</div>
+            <div class="detail"><strong>Reservation:</strong> {{ formatDate(accessory.reserv_start) }}</div>
+            <div class="detail"><strong>Due:</strong> {{ formatDate(accessory.reserv_end) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Accessories -->
+    <div class="reservations-container" v-if="lockers">
+      <div v-for="locker in lockers" class="reservation-card">
+        <div class="reservation-icon">
+        <img src = "../assets/locker_icon.png" alt="Laptop">
+        <!-- <img src = "../assets/locker_icon.png" v-else-if="reservation.type === 'Locker'" alt="Locker">
+        <img src = "../assets/accessory_icon.png" v-else-if="reservation.type === 'Accessories'" alt="Accessories"> -->
+      </div>
+        <div class="reservation-details">
+          <!-- Accessories Reservation Details -->
+          <div  class="details">
+            <div class="detail"><strong>Locker:</strong> {{ locker.serial_num }}</div>
+            <div class="detail"><strong>Location:</strong> {{ locker.room_desc }}</div>
+            <div class="detail"><strong>Reservation:</strong> {{ formatDate(locker.reserv_start) }}</div>
+            <div class="detail"><strong>Due:</strong> {{ formatDate(locker.reserv_end) }}</div>
           </div>
         </div>
       </div>
@@ -29,46 +61,58 @@
   <script>
 
   import { useLoggedInUserStore } from '@/store/loggedInUsers';
+  import { getLaptopReservationByID, getAccessoriesReservationByID, getLockerReservationByID, formatDate } from '@/services/API';
+  import { ref } from 'vue';
 
   export default {
+    mounted() {
+      getLaptopReservationByID(this.user_id).then(response=> {
+        this.laptops = response
+        console.log(this.laptops)
+      })
+      getAccessoriesReservationByID(this.user_id).then(response=> {
+        this.accessories = response
+        console.log(this.accessories)
+      })
+      getLockerReservationByID(this.user_id).then(response=> {
+        this.lockers = response
+        console.log(this.lockers)
+      })
+    },
     setup() {
       const store = useLoggedInUserStore();
+
+      const user_id = ref(store.id)
 
       return {
         store,
         username: store.currentUser,
         role: store.currentRole,
-        id: store.currentId
+        user_id
       }
     },
     data() {
       return {
-        reservations: [
-          {
-            id: 1,
-            type: 'Laptop',
-            deviceName: 'Dell 328',
-            serialNumber: '123-456-789',
-            duration: 'April 1 - April 10',
-          },
-          {
-            id: 2,
-            type: 'Locker',
-            lockerNumber: 'Locker 23',
-            room: 'Room 101',
-            duration: 'April 2 - April 12',
-          },
-          {
-            id: 3,
-            type: 'Accessories',
-            deviceName: 'Mouse',
-            serialNumber: '123-495-694',
-            duration: 'April 2 - April 12',
-          },
-          // Add more reservations as needed
-        ],
+        laptops: [],
+        accessories: [],
+        lockers: []
       };
     },
+    methods: {
+      formatDate(date) {
+        const newDate = new Date(date);
+
+        const options = { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        };
+        
+        const formattedDate = newDate.toLocaleDateString('en-US', options);
+
+        return formattedDate
+      }
+    }
   }
   </script>
 <style>
@@ -115,5 +159,6 @@
 }
 
 </style>
+
 
   
