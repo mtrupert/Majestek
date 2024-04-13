@@ -27,7 +27,7 @@
 <script>
 
 import { useLoggedInUserStore } from '@/store/loggedInUsers';
-import { getAvailableLaptops, getAvailableAccessories, getAvailableLockers, reserveLocker } from '@/services/API';
+import { getAvailableLaptops, getAvailableAccessories, getAvailableLockers, reserveLocker, reserveEquipment } from '@/services/API';
 import { onMounted, ref } from 'vue';
 
 
@@ -69,23 +69,29 @@ export default {
   },
   methods: {
     async submitForm() {
-      console.log(`Selected Type: ${this.selectedDevice}`);
+      console.log(`Selected Type: ${this.selectedTy}`);
       // Implement form submission logic here
       if (this.selectedType = "laptop") {
-        await reserveLocker(this.user_id, this.selectedDevice).then(response=>{
+        await reserveEquipment(this.user_id, this.selectedDevice).then(response=>{
           console.log(response);
           this.$router.push('/');
         })
       }
 
-      if (this.selectedType = "accessory") {
-        
+      else if (this.selectedType = "accessory") {
+        await reserveEquipment(this.user_id, this.selectedDevice).then(response=>{
+          console.log(response);
+          this.$router.push('/');
+        })
       }
 
-      if (this.selectedType = "locker") {
-
+      else if (this.selectedType = "locker") {
+        await reserveLocker(this.user_id, this.selectedDevice).then(response=>{
+          console.log(response);
+          this.$router.push('/');
+        })
       }
-      if (!this.selectedType) {
+      else {
         console.log("No option selected.")
       }
       
