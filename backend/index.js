@@ -498,6 +498,67 @@ app.get('/equipment/accessories', async (req, res) => {
 });
 
 
+// GET Reserve Laptop by id
+app.get('/reserved/laptops/:id', async (req, res) => {
+
+    const { id } = req.params
+
+    const command1 = "SELECT Reservation.reserv_start, Reservation.reserv_end, Equipment.equipment_name, " 
+    const command2 = "Equipment.serial_number FROM Reservation "
+    const command3 = "JOIN Equipment ON Reservation.equipment_id = Equipment.equipment_id "
+    const command4 = `WHERE user_id = ${id} AND Equipment.equipment_type_id = 1;`
+
+    const command = command1 + command2 + command3 + command4;
+    console.log(command)
+
+    db.query(command, (err, results) =>{
+        console.log(results)
+        return res.json(results);
+    })
+    
+});
+
+// Get accessories by id
+app.get('/reserved/accessories/:id', async (req, res) => {
+
+    const { id } = req.params
+
+    const command1 = "SELECT Reservation.reserv_start, Reservation.reserv_end, Equipment.equipment_name, " 
+    const command2 = "Equipment.serial_number FROM Reservation "
+    const command3 = "JOIN Equipment ON Reservation.equipment_id = Equipment.equipment_id "
+    const command4 = `WHERE user_id = ${id} AND Equipment.equipment_type_id = 2;`
+
+    const command = command1 + command2 + command3 + command4;
+    console.log(command)
+
+    db.query(command, (err, results) =>{
+        console.log(results)
+        return res.json(results);
+    })
+    
+});
+
+// GET Lockers by ID
+app.get('/reserved/lockers/:id', async (req, res) => {
+
+    const { id } = req.params
+
+    const command1 = "SELECT Reservation.reserv_start, Reservation.reserv_end, Locker.serial_num, " 
+    const command2 = "Room.room_desc FROM Reservation "
+    const command3 = "JOIN Locker ON Reservation.locker_id = Locker.locker_id "
+    const command4 = `JOIN Room ON Room.room_id = Locker.room_id WHERE user_id = ${id};`
+
+    const command = command1 + command2 + command3 + command4;
+    console.log(command)
+
+    db.query(command, (err, results) =>{
+        console.log(results)
+        return res.json(results);
+    })
+    
+});
+
+
 
 //GET Reservations
 app.get("/reservations", async (req, res) => {
@@ -531,6 +592,8 @@ app.get("/reservation-user/:user_id", async (req, res) => {
 
     });
 });
+
+
 
 //GET Reservation by User
 app.get('/reservation/user/:id', async (req, res) => {
