@@ -375,13 +375,13 @@ app.post("/ticket/post/:info", async (req, res) => {
 // GET all available Laptops
 app.get('/equipment/laptops', async (req, res) => {
 
-    command1 = "SELECT Equipment.equipment_id, Equipment.serial_number, " 
-    command2 = "Equipment_Type.type, Equipment.equipment_name "
-    command3 = "FROM Equipment "
-    command4 = "JOIN Equipment_Type ON Equipment.equipment_type_id = Equipment_Type.equipment_type_id "
-    command5 = "LEFT JOIN Reservation ON Reservation.equipment_id = Equipment.equipment_id "
-    command6 = "WHERE Reservation.reservation_id IS NULL "
-    command7 = ' AND Equipment_Type.type = "Laptop";'
+    command1 = "SELECT Equipment.equipment_id, Equipment.equipment_name, Equipment.serial_number, " 
+    command2 = "Equipment_Type.type, Reservation.equipment_id AS 'reserv_id' FROM Equipment "
+    command3 = "JOIN Equipment_Type ON Equipment.equipment_type_id = Equipment_Type.Equipment_type_id "
+    command4 = "LEFT JOIN Reservation ON Reservation.equipment_id = Equipment.equipment_id "
+    command5 = "WHERE Equipment.equipment_type_id = 1 "
+    command6 = "AND Equipment.equipment_status_id = 1 "
+    command7 = 'AND Reservation.equipment_id IS NULL;'
 
     command = command1 + command2 + command3 + command4 + command5 + command6 + command7
 
@@ -395,13 +395,13 @@ app.get('/equipment/laptops', async (req, res) => {
 // GET all available Accesories
 app.get('/equipment/accessories', async (req, res) => {
 
-    command1 = "SELECT Equipment.equipment_id, Equipment.serial_number, " 
-    command2 = "Equipment_Type.type, Equipment.equipment_name "
-    command3 = "FROM Equipment "
-    command4 = "JOIN Equipment_Type ON Equipment.equipment_type_id = Equipment_Type.equipment_type_id "
-    command5 = "LEFT JOIN Reservation ON Reservation.equipment_id = Equipment.equipment_id "
-    command6 = "WHERE Reservation.reservation_id IS NULL "
-    command7 = ' AND Equipment_Type.type = "Accessories";'
+    command1 = "SELECT Equipment.equipment_id, Equipment.equipment_name, Equipment.serial_number, " 
+    command2 = "Equipment_Type.type, Reservation.equipment_id AS 'reserv_id' FROM Equipment "
+    command3 = "JOIN Equipment_Type ON Equipment.equipment_type_id = Equipment_Type.Equipment_type_id "
+    command4 = "LEFT JOIN Reservation ON Reservation.equipment_id = Equipment.equipment_id "
+    command5 = "WHERE Equipment.equipment_type_id = 2 "
+    command6 = "AND Equipment.equipment_status_id = 1 "
+    command7 = 'AND Reservation.equipment_id IS NULL;'
 
     command = command1 + command2 + command3 + command4 + command5 + command6 + command7
 
@@ -411,6 +411,7 @@ app.get('/equipment/accessories', async (req, res) => {
     })
     
 });
+
 
 
 //GET Reservations
