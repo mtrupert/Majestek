@@ -498,6 +498,49 @@ app.get('/equipment/accessories', async (req, res) => {
 });
 
 
+//GET ALL Equipment Reservations
+app.get("/equipment/all-reservations", async (req, res) => {
+
+    command1 = "SELECT reservation_id, reserv_start, reserv_end, user_name, Equipment.equipment_name, "
+    command2 = "user_email, type, reserv_status from Reservation   "
+    command3 = "JOIN Equipment ON Equipment.equipment_id = Reservation.equipment_id "
+    command4 = "JOIN User ON User.user_id = Reservation.user_id "
+    command5 = "JOIN Equipment_Type ON Equipment_Type.equipment_type_id = Equipment.equipment_type_id; "
+
+    command = command1 + command2 + command3 + command4 + command5;
+
+    db.query(command, (err, results) => {
+
+
+
+        res.json(results)
+
+    });
+ 
+});
+
+
+// All Locker Reservations
+app.get("/lockers/all-reservations", async (req, res) => {
+
+    command1 = "SELECT reservation_id, reserv_start, reserv_end, user_name, Locker.serial_num,  "
+    command2 = "user_email, Room.room_desc, reserv_status from Reservation "
+    command3 = "JOIN Locker ON Locker.locker_id = Reservation.locker_id "
+    command4 = "JOIN Room ON Room.room_id = Locker.room_id "
+    command5 = "JOIN User ON User.user_id = Reservation.user_id;  "
+
+    command = command1 + command2 + command3 + command4 + command5;
+
+    db.query(command, (err, results) => {
+
+
+
+        res.json(results)
+
+    });
+ 
+});
+
 // GET Reserve Laptop by id
 app.get('/reserved/laptops/:id', async (req, res) => {
 
