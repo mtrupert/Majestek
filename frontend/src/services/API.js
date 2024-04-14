@@ -95,6 +95,29 @@ export async function createTicket(ticketData) {
 
 
 
+export async function getAllEquipmentReservations() {
+  try {
+    const response = await axiosInstance.get(`/equipment/all-reservations`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching equipment reservations:`, error);
+    throw error;
+  }
+}
+
+
+export async function getAllLockerReservations() {
+  try {
+    const response = await axiosInstance.get(`/lockers/all-reservations`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching locker reservations:`, error);
+    throw error;
+  }
+}
+
+
+
 export async function getReservationByUser(userId) {
   try {
     const response = await axiosInstance.get(`/reservation-user/${userId}`);
