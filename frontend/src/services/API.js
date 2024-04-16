@@ -420,3 +420,12 @@ export async function getAllEquipmentTypes() {
   }
 }
 
+export async function updateTicket(ticketId, newStatus) {
+  try {
+    const response = await axiosInstance.put(`/ticket/updateStatus/${ticketId}`, { status: newStatus });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating ticket:', error);
+    throw error;
+  }
+}

@@ -7,45 +7,45 @@
           <th>Description</th>
           <th>Status</th>
           <th>Date</th>
-          <th>User Email</th> <!-- Changed from User ID to User Email -->
-          <!-- Add more table headers as needed -->
+          <th>User Email</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="ticket in tickets" :key="ticket.ticket_id">
           <td>{{ ticket.ticket_desc }}</td>
-          <td>{{ ticket.ticket_status }}</td>
+          <td>
+            <select v-model="ticket.ticket_status" @change="updateStatus(ticket)">
+              <option :value="ticket.ticket_status">{{ ticket.ticket_status }}</option>
+              <option value="resolve">Resolve</option>
+              <option value="in progress">In Progress</option>
+            </select>
+          </td>
           <td>{{ formatDate(ticket.ticket_date) }}</td>
-          <td>{{ userEmails[ticket.user_id] }}</td> <!-- Look up user email from userEmails object -->
-          <!-- Add more table cells as needed -->
+          <td>{{ userEmails[ticket.user_id] }}</td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
 
-
 <script>
-// Import the getAllTickets function and getAllUsersEmail function from your API file
-import { getAllTickets, getAllUsersEmail } from '../services/API';
-
+import { getAllTickets, getAllUsersEmail, updateTicket } from '../services/API';
 
 export default {
   data() {
     return {
-      tickets: [], // Assuming you fetch the ticket data and assign it to this array
-      userEmails: {} // Object to store user email addresses
+      tickets: [],
+      userEmails: {}
     };
   },
   created() {
-    // Fetch ticket data and user emails when the component is created
     this.fetchTicketData();
     this.fetchUserEmails();
   },
   methods: {
     async fetchTicketData() {
       try {
-        // Call the getAllTickets function to fetch ticket data
+        // Fetch ticket data including the existing status from the backend
         this.tickets = await getAllTickets();
       } catch (error) {
         console.error('Error fetching tickets:', error);
@@ -53,20 +53,27 @@ export default {
     },
     async fetchUserEmails() {
       try {
-        // Call the getAllUsersEmail function to fetch user emails
         const userEmails = await getAllUsersEmail();
         this.userEmails = userEmails.reduce((acc, email, index) => {
-          acc[index + 1] = email; // Assuming user IDs start from 1
+          acc[index + 1] = email;
           return acc;
         }, {});
       } catch (error) {
         console.error('Error fetching user emails:', error);
       }
     },
+    async updateStatus(ticket) {
+      try {
+        // Update the ticket status in the backend
+        await updateTicket(ticket.ticket_id, ticket.ticket_status);
+        console.log('Ticket status updated successfully.');
+      } catch (error) {
+        console.error('Error updating ticket status:', error);
+      }
+    },
     formatDate(dateString) {
-      // Convert date string to a formatted date
       const date = new Date(dateString);
-      return date.toLocaleDateString(); // You can adjust the format as needed
+      return date.toLocaleDateString();
     }
   }
 };

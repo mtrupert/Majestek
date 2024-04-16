@@ -837,6 +837,24 @@ app.put("/ticket/update/:info", async (req, res) => {
     res.send('updated')
 });
 
+app.put("/ticket/updateStatus/:ticketId", async (req, res) => {
+    try {
+        const { ticketId } = req.params;
+        const { status } = req.body;
+
+        // Update the ticket status in the database
+        const command = "UPDATE Ticket SET ticket_status = ? WHERE ticket_id = ?";
+        const values = [status, ticketId];
+        await db.query(command, values);
+
+        console.log("Ticket status updated successfully.");
+        res.status(200).send("Ticket status updated successfully.");
+    } catch (error) {
+        console.error("Error updating ticket status:", error);
+        res.status(500).send("Error updating ticket status.");
+    }
+});
+
 
 
 
